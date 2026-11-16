@@ -1,0 +1,2776 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6366f1">
+<title>PDF Studio — MCT YAZILIM</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236366f1'/%3E%3Cpath d='M20 13h15l10 10v28a2 2 0 0 1-2 2H20a2 2 0 0 1-2-2V15a2 2 0 0 1 2-2z' fill='white'/%3E%3Cpath d='M35 13v10h10z' fill='%23c7d2fe'/%3E%3Cline x1='23' y1='29' x2='42' y2='29' stroke='%236366f1' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='23' y1='35' x2='42' y2='35' stroke='%236366f1' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='23' y1='41' x2='35' y2='41' stroke='%23ec4899' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%236366f1'/%3E%3Cpath d='M58 38h42l30 30v76a6 6 0 0 1-6 6H58a6 6 0 0 1-6-6V44a6 6 0 0 1 6-6z' fill='white'/%3E%3Cpath d='M100 38v30h30z' fill='%23c7d2fe'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+<style>
+:root{
+  --bg:#fafaf9;--bg-2:#f5f5f4;--card:#fff;
+  --text:#1c1917;--text-2:#57534e;--muted:#78716c;
+  --border:#e7e5e4;--border-2:#d6d3d1;
+  --accent:#6366f1;--accent-2:#4f46e5;--accent-soft:#eef2ff;
+  --danger:#ef4444;--success:#10b981;--warning:#f59e0b;
+  --shadow-sm:0 1px 2px rgba(28,25,23,.04);
+  --shadow:0 1px 3px rgba(28,25,23,.06),0 1px 2px rgba(28,25,23,.04);
+  --radius:12px;--radius-sm:8px;
+}
+[data-theme="dark"]{
+  --bg:#0c0a09;--bg-2:#1c1917;--card:#1c1917;
+  --text:#fafaf9;--text-2:#d6d3d1;--muted:#a8a29e;
+  --border:#292524;--border-2:#44403c;
+  --accent:#818cf8;--accent-2:#a5b4fc;--accent-soft:#1e1b4b;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;font-size:15px;line-height:1.55}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.hidden{display:none!important}
+button{font-family:inherit;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+input[type=file]{display:none}
+input[type=color]{width:100%;height:38px;padding:2px;border:1px solid var(--border);border-radius:8px;background:var(--bg);cursor:pointer;display:block}
+
+.topbar{position:sticky;top:0;z-index:30;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:saturate(180%) blur(16px);
+  -webkit-backdrop-filter:saturate(180%) blur(16px);
+  border-bottom:1px solid var(--border)}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 24px;
+  display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;flex-shrink:0}
+.brand-icon{width:28px;height:28px;border-radius:7px;background:var(--text);
+  color:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brand-icon svg{width:15px;height:15px}
+.search-input{flex:1;max-width:380px;position:relative;min-width:0}
+.search-input svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);
+  width:15px;height:15px;color:var(--muted);pointer-events:none}
+.search-input input{width:100%;padding:8px 12px 8px 34px;
+  border:1px solid var(--border);border-radius:8px;background:var(--card);
+  color:var(--text);font-size:13px;font-family:inherit;font-weight:500;
+  outline:none;transition:.15s}
+.search-input input:focus{border-color:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent)}
+.actions{margin-left:auto;display:flex;gap:6px;flex-shrink:0}
+.icon-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  background:transparent;border:1px solid var(--border);border-radius:8px;
+  color:var(--text-2);transition:.15s;position:relative}
+.icon-btn:hover{background:var(--bg-2);color:var(--text)}
+.icon-btn svg{width:17px;height:17px}
+.icon-btn .badge-mini{position:absolute;top:-5px;right:-5px;min-width:16px;height:16px;
+  background:var(--accent);color:#fff;border-radius:99px;font-size:10px;
+  font-weight:700;display:flex;align-items:center;justify-content:center;
+  padding:0 4px;border:2px solid var(--bg)}
+
+.container{max-width:1200px;margin:0 auto;padding:28px 24px 80px;
+  display:flex;flex-direction:column;gap:24px}
+
+.dropzone{background:var(--card);border:1.5px dashed var(--border-2);
+  border-radius:var(--radius);padding:20px 24px;display:flex;
+  align-items:center;gap:18px;cursor:pointer;transition:.2s;flex-wrap:wrap}
+.dropzone:hover{border-color:var(--accent);background:var(--accent-soft)}
+.dropzone.drag{border-color:var(--accent);border-style:solid;background:var(--accent-soft)}
+.dz-icon{width:42px;height:42px;border-radius:10px;background:var(--accent-soft);
+  color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dropzone:hover .dz-icon{background:var(--accent);color:#fff}
+.dz-icon svg{width:20px;height:20px}
+.dz-text{flex:1;min-width:0}
+.dz-text strong{display:block;font-size:14.5px;font-weight:600;margin-bottom:2px}
+.dz-text p{margin:0;color:var(--muted);font-size:12.5px}
+.dz-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+.limit-switch{display:flex;align-items:center;gap:10px;background:var(--bg-2);
+  padding:6px 12px;border-radius:99px}
+[data-theme="dark"] .limit-switch{background:var(--bg)}
+.limit-switch-label{color:var(--muted);font-size:12px;font-weight:500;
+  transition:.15s;white-space:nowrap;cursor:pointer;user-select:none}
+.limit-switch-label.on{color:var(--accent);font-weight:600}
+.limit-toggle{width:38px;height:22px;border-radius:99px;background:var(--border-2);
+  border:none;position:relative;padding:0;transition:.2s;cursor:pointer;flex-shrink:0}
+.limit-toggle:hover{background:var(--border)}
+.limit-toggle .lt-knob{position:absolute;top:2px;left:2px;width:18px;height:18px;
+  border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.15);display:block}
+.limit-toggle.on{background:var(--accent)}
+.limit-toggle.on .lt-knob{transform:translateX(16px)}
+
+.section-head{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;gap:12px;flex-wrap:wrap}
+.section-head h2{font-size:13px;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:8px}
+.section-head .count{background:var(--accent-soft);color:var(--accent);
+  padding:1px 8px;border-radius:99px;font-size:11px;font-weight:700;
+  text-transform:none;letter-spacing:0}
+.file-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.file-item{background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px 14px;
+  display:flex;align-items:center;gap:12px;transition:.15s;cursor:grab}
+.file-item:hover{border-color:var(--border-2)}
+.file-item.dragging{opacity:.4}
+.file-item.drag-over{border-color:var(--accent);
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 15%,transparent)}
+.drag-handle{color:var(--muted);display:flex;flex-shrink:0;opacity:.5}
+.drag-handle svg{width:12px;height:12px}
+.file-icon{width:32px;height:40px;border-radius:6px;background:var(--bg-2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--text-2)}
+.file-icon svg{width:16px;height:16px}
+.file-info{flex:1;min-width:0}
+.file-name{font-weight:500;font-size:13px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;margin-bottom:1px}
+.file-meta{font-size:11.5px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+.file-badge{background:var(--bg-2);color:var(--text-2);padding:0 6px;border-radius:4px;
+  font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.file-actions{display:flex;gap:2px;flex-shrink:0}
+.file-actions button{background:transparent;border:none;color:var(--muted);
+  padding:6px;border-radius:6px;transition:.15s;display:flex}
+.file-actions button:hover{background:var(--bg-2);color:var(--text)}
+.file-actions button[data-act="remove"]:hover{color:var(--danger)}
+.file-actions svg{width:15px;height:15px}
+
+.tools-layout{display:grid;grid-template-columns:1.5fr 1fr;gap:28px}
+@media(max-width:900px){.tools-layout{grid-template-columns:1fr;gap:24px}}
+.tools-column{display:flex;flex-direction:column}
+.tools-column-title{font-size:12px;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em;
+  padding-bottom:12px;margin-bottom:18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px}
+.tools-column-title svg{width:14px;height:14px}
+.tools-groups{display:flex;flex-direction:column;gap:18px}
+.tool-group-title{font-size:10.5px;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px 0}
+.tool-group-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tools-column.visual .tool-group-grid{grid-template-columns:1fr}
+@media(max-width:640px){.tool-group-grid{grid-template-columns:1fr}}
+
+.tool-btn{background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px 12px;
+  display:flex;align-items:center;gap:10px;text-align:left;
+  color:var(--text);font-size:13px;font-weight:500;
+  transition:.15s;min-height:44px;cursor:pointer;font-family:inherit;
+  position:relative;padding-right:36px}
+.tool-btn:hover{border-color:var(--border-2);background:var(--bg-2)}
+.tool-btn.active{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.tool-btn.disabled{opacity:.4;pointer-events:none}
+.tb-icon{font-size:15px;flex-shrink:0;line-height:1}
+.tb-label{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tc-fav{position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  width:24px;height:24px;border-radius:5px;display:flex;align-items:center;
+  justify-content:center;background:transparent;border:none;color:var(--muted);
+  cursor:pointer;transition:.15s;opacity:.35}
+.tool-btn:hover .tc-fav{opacity:1}
+.tc-fav:hover{background:var(--bg-2);color:var(--warning);opacity:1}
+.tc-fav.active{opacity:1;color:var(--warning)}
+.tc-fav svg{width:13px;height:13px}
+.tc-fav.active svg{fill:currentColor}
+.empty-state{padding:24px;text-align:center;color:var(--muted);
+  font-size:13px;border:1px dashed var(--border-2);border-radius:var(--radius-sm)}
+
+.settings-panel{background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;
+  animation:slideUp .25s cubic-bezier(.4,0,.2,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sp-head{padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:16px}
+.sp-title-wrap{display:flex;align-items:center;gap:12px;min-width:0}
+.sp-icon{width:36px;height:36px;border-radius:9px;background:var(--accent-soft);
+  color:var(--accent);display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0}
+.sp-title-wrap h3{font-size:14.5px;font-weight:600;margin-bottom:1px}
+.sp-title-wrap p{font-size:12px;color:var(--muted);margin:0}
+.sp-close{background:transparent;border:1px solid var(--border);color:var(--muted);
+  width:32px;height:32px;border-radius:8px;display:flex;align-items:center;
+  justify-content:center;transition:.15s;flex-shrink:0}
+.sp-close:hover{background:var(--bg-2);color:var(--text)}
+.sp-close svg{width:15px;height:15px}
+.sp-body{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.sp-body label{display:flex;flex-direction:column;gap:6px;font-size:12.5px;
+  font-weight:500;color:var(--text-2)}
+.sp-body input[type=text],.sp-body input[type=number],.sp-body input[type=password],
+.sp-body select,.sp-body textarea{
+  background:var(--bg);border:1px solid var(--border);color:var(--text);
+  padding:9px 11px;border-radius:var(--radius-sm);font-size:13.5px;
+  font-family:inherit;outline:none;width:100%;transition:.15s;font-weight:500}
+.sp-body select{cursor:pointer}
+.sp-body textarea{cursor:text;resize:vertical;min-height:100px}
+.sp-body input[type=text],.sp-body input[type=number],.sp-body input[type=password]{cursor:text}
+.sp-body input:focus,.sp-body select:focus,.sp-body textarea:focus{
+  border-color:var(--accent);background:var(--card);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 12%,transparent)}
+.sp-body small{color:var(--muted);font-weight:400;font-size:11.5px;line-height:1.4}
+.sp-body input[type=file]{display:block;background:var(--bg);border:1px solid var(--border);
+  color:var(--text);padding:9px 11px;border-radius:var(--radius-sm);font-size:13px;
+  font-family:inherit;width:100%;cursor:pointer}
+.sp-body .checkbox-row{display:flex;align-items:center;gap:8px;font-size:12.5px;
+  font-weight:500;color:var(--text-2);cursor:pointer;flex-direction:row}
+.sp-body .checkbox-row input{accent-color:var(--accent);margin:0;width:14px;height:14px;cursor:pointer}
+.radio-row{display:flex;gap:6px;flex-wrap:wrap}
+.radio-row label{flex-direction:row;align-items:center;gap:8px;padding:9px 14px;
+  border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;
+  background:var(--bg);font-weight:500;color:var(--text);font-size:12.5px;
+  flex:none;transition:.15s}
+.radio-row label:hover{border-color:var(--border-2)}
+.radio-row input{accent-color:var(--accent);margin:0;cursor:pointer}
+.radio-row label:has(input:checked){border-color:var(--accent);
+  background:var(--accent-soft);color:var(--accent);font-weight:600}
+.sp-actions{padding:14px 20px;border-top:1px solid var(--border);
+  background:var(--bg);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.sp-actions>span{flex:1;min-width:0}
+.progress-wrap{height:3px;background:var(--border);border-radius:99px;
+  overflow:hidden;width:100%;margin-top:8px;display:none}
+.progress-wrap.active{display:block}
+.progress-bar{height:100%;background:var(--accent);width:0%;border-radius:99px;
+  transition:width .3s ease}
+
+.btn{padding:9px 18px;border-radius:var(--radius-sm);border:none;
+  font-size:13px;font-weight:600;transition:.15s;
+  display:inline-flex;align-items:center;gap:7px;font-family:inherit}
+.btn.primary{background:var(--text);color:var(--bg)}
+.btn.primary:hover{background:var(--text-2)}
+.btn.primary:disabled{opacity:.4;cursor:not-allowed}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn.ghost:hover{background:var(--bg-2)}
+.btn.accent{background:var(--accent);color:#fff}
+.btn.accent:hover{background:var(--accent-2)}
+.btn.small{padding:6px 12px;font-size:12px}
+.btn svg{width:14px;height:14px}
+
+.status{font-size:12.5px;color:var(--muted);font-weight:500;
+  display:flex;align-items:center;gap:8px}
+.status.error{color:var(--danger)}
+.status.success{color:var(--success)}
+.status .spinner{width:12px;height:12px;border:2px solid var(--border);
+  border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.result-panel{background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  animation:slideUp .25s cubic-bezier(.4,0,.2,1)}
+.result-icon{width:40px;height:40px;border-radius:10px;
+  background:color-mix(in srgb,var(--success) 12%,transparent);
+  color:var(--success);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.result-icon svg{width:20px;height:20px}
+.result-info{flex:1;min-width:180px}
+.result-info .rn{font-weight:600;font-size:13.5px;word-break:break-all;margin-bottom:2px}
+.result-info .rs{color:var(--muted);font-size:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.savings-badge{background:color-mix(in srgb,var(--success) 12%,transparent);
+  color:var(--success);padding:2px 8px;border-radius:5px;font-weight:600;font-size:11px}
+.savings-badge.grow{background:color-mix(in srgb,var(--warning) 12%,transparent);color:var(--warning)}
+.result-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);
+  backdrop-filter:blur(6px);z-index:100;display:flex;
+  align-items:center;justify-content:center;padding:16px;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-content{background:var(--card);border-radius:var(--radius);
+  max-width:900px;width:100%;max-height:90vh;display:flex;
+  flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);
+  animation:scaleIn .2s cubic-bezier(.4,0,.2,1)}
+@keyframes scaleIn{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-content.narrow{max-width:480px}
+.modal-content.wide{max-width:1000px}
+.modal-head{padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:12px}
+.modal-head h3{font-size:14.5px}
+.modal-tip{padding:10px 20px;font-size:12px;color:var(--muted);
+  background:var(--bg);border-bottom:1px solid var(--border)}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--border);
+  display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.modal-body{padding:16px 20px;overflow-y:auto}
+
+.thumb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
+  gap:10px;padding:16px;overflow-y:auto;flex:1}
+.thumb{background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;padding:6px;display:flex;flex-direction:column;
+  gap:6px;align-items:center}
+.thumb canvas{width:100%;height:auto;border-radius:4px;display:block;background:#fff}
+.thumb-num{font-size:10.5px;font-weight:600;color:var(--muted)}
+.thumb-btns{display:flex;gap:2px;width:100%;justify-content:center}
+.thumb-btns button{background:var(--card);border:1px solid var(--border);
+  color:var(--text);padding:3px 6px;border-radius:5px;font-size:11px;
+  flex:1;max-width:32px;transition:.15s}
+.thumb-btns button:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.history-list{list-style:none;margin:0;padding:0;display:flex;
+  flex-direction:column;gap:6px;max-height:60vh;overflow-y:auto}
+.history-item{background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.history-item .hi-icon{width:28px;height:28px;border-radius:6px;
+  background:var(--accent-soft);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.history-item .hi-meta{flex:1;min-width:0}
+.history-item .hi-title{font-weight:600;font-size:12.5px;margin-bottom:1px}
+.history-item .hi-sub{font-size:11px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+.history-item .hi-sub .saving{color:var(--success);font-weight:600}
+.history-empty{text-align:center;padding:28px 20px;color:var(--muted);font-size:12.5px}
+
+.sig-canvas-wrap{border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:#fff;position:relative;overflow:hidden}
+.sig-canvas-wrap canvas{display:block;width:100%;height:180px;touch-action:none;cursor:crosshair}
+.sig-tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+
+.saved-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.saved-item{background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.saved-item .si-icon{width:28px;height:36px;border-radius:6px;background:var(--card);
+  border:1px solid var(--border);color:var(--text-2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.saved-item .si-icon svg{width:14px;height:14px}
+.saved-item .si-info{flex:1;min-width:0}
+.saved-item .si-name{font-weight:500;font-size:12.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.saved-item .si-meta{font-size:11px;color:var(--muted)}
+.saved-item .si-actions{display:flex;gap:2px}
+.saved-item .si-actions button{background:transparent;border:none;color:var(--muted);
+  padding:6px;border-radius:6px;transition:.15s;display:flex}
+.saved-item .si-actions button:hover{background:var(--bg-2);color:var(--text)}
+.saved-item .si-actions button[data-act="del"]:hover{color:var(--danger)}
+.saved-item .si-actions svg{width:14px;height:14px}
+
+.pw-item{background:var(--bg);border:1px solid var(--border);
+  border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.pw-item .pw-info{flex:1;min-width:0}
+.pw-item .pw-name{font-weight:600;font-size:12.5px;margin-bottom:1px}
+.pw-item .pw-pw{font-family:monospace;font-size:12px;color:var(--muted);
+  display:flex;align-items:center;gap:6px}
+.pw-item .pw-actions{display:flex;gap:2px}
+.pw-item .pw-actions button{background:transparent;border:none;color:var(--muted);
+  padding:6px;border-radius:6px;transition:.15s;display:flex}
+.pw-item .pw-actions button:hover{background:var(--card);color:var(--text)}
+.pw-item .pw-actions button[data-act="del"]:hover{color:var(--danger)}
+.pw-item .pw-actions svg{width:14px;height:14px}
+
+.toast{position:fixed;bottom:24px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--text);color:var(--bg);padding:11px 18px;
+  border-radius:8px;font-size:13px;box-shadow:0 12px 32px rgba(0,0,0,.2);
+  z-index:200;max-width:calc(100vw - 32px);text-align:center;
+  font-weight:500;opacity:0;transition:all .25s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;display:flex;align-items:center;gap:10px}
+.toast:not(.hidden){opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.error{background:var(--danger);color:#fff}
+.toast.success{background:var(--success);color:#fff}
+
+.footer{text-align:center;padding:24px 20px;color:var(--muted);
+  font-size:12px;border-top:1px solid var(--border);margin-top:20px;
+  display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.footer strong{color:var(--text);font-weight:700}
+
+kbd{background:var(--bg-2);border:1px solid var(--border);color:var(--text-2);
+  padding:1px 6px;border-radius:4px;font-size:11px;font-family:monospace;font-weight:600}
+
+body.busy-lock .dropzone,
+body.busy-lock .file-list,
+body.busy-lock .tools-layout { pointer-events:none; opacity:.55; }
+body.busy-lock .sp-body { opacity:.75; }
+
+@supports (padding: max(0px)) {
+  .topbar-inner { padding-left: max(12px, env(safe-area-inset-left)); padding-right: max(12px, env(safe-area-inset-right)); }
+  .container { padding-left: max(14px, env(safe-area-inset-left)); padding-right: max(14px, env(safe-area-inset-right)); }
+  .footer { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+}
+
+@media(max-width:640px){
+  .container{padding:20px 14px 60px;gap:20px}
+  .topbar-inner{padding:10px 14px;gap:8px}
+  .brand span{display:none}
+  .search-input{max-width:none}
+  .dropzone{padding:16px 18px;gap:14px}
+  .dz-icon{width:36px;height:36px}
+  .dz-icon svg{width:18px;height:18px}
+  .sp-head{padding:14px 16px}
+  .sp-body{padding:14px 16px}
+  .sp-actions{padding:12px 16px}
+  .result-panel{padding:14px}
+  .tool-btn{min-height:52px;font-size:14px;padding:12px 14px;padding-right:36px}
+  .icon-btn{width:40px;height:40px}
+  .modal{align-items:flex-end;padding:0}
+  .modal-content{max-height:95vh;border-radius:16px 16px 0 0;max-width:100%}
+  .modal-content.narrow,.modal-content.wide{max-width:100%}
+  .tc-fav{width:32px;height:32px;opacity:.8}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <span>PDF Studio</span>
+    </div>
+    <div class="search-input">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="toolSearch" placeholder="Araç ara…" autocomplete="off">
+    </div>
+    <div class="actions">
+      <button id="savedBtn" class="icon-btn" title="Son dosyalar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      </button>
+      <button id="pwBtn" class="icon-btn" title="Şifre kasası">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </button>
+      <button id="historyBtn" class="icon-btn" title="Geçmiş">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+        <span class="badge-mini" id="historyBadge" style="display:none">0</span>
+      </button>
+      <button id="themeBtn" class="icon-btn" title="Açık/Koyu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section id="dropzone" class="dropzone">
+    <input type="file" id="fileInput" accept="application/pdf,image/png,image/jpeg,image/webp" multiple>
+    <div class="dz-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    </div>
+    <div class="dz-text">
+      <strong>PDF veya görsel yükle</strong>
+      <p>PDF, PNG, JPG, WebP · <kbd>Ctrl</kbd>+<kbd>O</kbd></p>
+    </div>
+    <div class="dz-meta">
+      <div class="limit-switch">
+        <span class="limit-switch-label" id="limitLabel">Maks 100 sayfa</span>
+        <button type="button" id="limitToggle" class="limit-toggle" role="switch" aria-checked="false" title="Sayfa limitini kaldır">
+          <span class="lt-knob"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section id="filesSec" class="hidden">
+    <div class="section-head">
+      <h2>Dosyalar <span class="count" id="fileCount">0</span></h2>
+      <button id="clearBtn" class="btn ghost small">Temizle</button>
+    </div>
+    <ul id="fileList" class="file-list"></ul>
+  </section>
+
+  <section id="toolsSection" class="hidden">
+    <div class="tools-layout">
+      <div class="tools-column">
+        <h3 class="tools-column-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          PDF Araçları
+        </h3>
+        <div id="pdfTools" class="tools-groups"></div>
+      </div>
+      <div class="tools-column visual">
+        <h3 class="tools-column-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Görsel & Oluştur
+        </h3>
+        <div id="visualTools" class="tools-groups"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="settingsPanel" class="settings-panel hidden">
+    <div class="sp-head">
+      <div class="sp-title-wrap">
+        <div class="sp-icon" id="spIcon">⚙️</div>
+        <div>
+          <h3 id="spTitle"></h3>
+          <p id="spDesc"></p>
+        </div>
+      </div>
+      <button id="spClose" class="sp-close" title="Kapat (ESC)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="sp-body" id="spBody"></div>
+    <div class="sp-actions">
+      <button id="runBtn" class="btn primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Çalıştır
+      </button>
+      <button id="batchBtn" class="btn accent hidden" title="Tüm dosyalara uygula">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Tümüne Uygula
+      </button>
+      <span id="status" class="status"></span>
+      <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
+    </div>
+  </section>
+
+  <section id="resultSec" class="hidden">
+    <div class="result-panel">
+      <div class="result-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="result-info">
+        <div class="rn" id="resultName"></div>
+        <div class="rs" id="resultSize"></div>
+      </div>
+      <div class="result-actions">
+        <button id="shareBtn" class="btn ghost small hidden" title="Paylaş">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Paylaş
+        </button>
+        <button id="downloadBtn" class="btn primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          İndir
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="reorderModal" class="modal hidden">
+  <div class="modal-content">
+    <div class="modal-head"><h3>🔀 Sayfaları Yeniden Sırala</h3>
+      <button id="reorderClose" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-tip">Sayfaları ← → ile taşı, ⏮ ile başa al.</div>
+    <div id="reorderGrid" class="thumb-grid"></div>
+    <div class="modal-foot"><button id="reorderApply" class="btn primary">Uygula ve İndir</button></div>
+  </div>
+</div>
+
+<div id="historyModal" class="modal hidden">
+  <div class="modal-content narrow">
+    <div class="modal-head"><h3>📜 Geçmiş</h3>
+      <button id="historyClose" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body"><ul id="historyList" class="history-list"></ul></div>
+    <div class="modal-foot"><button id="historyClear" class="btn ghost small">Temizle</button></div>
+  </div>
+</div>
+
+<div id="savedModal" class="modal hidden">
+  <div class="modal-content narrow">
+    <div class="modal-head"><h3>📁 Son Dosyalar</h3>
+      <button id="savedClose" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-tip">Son 15 dosya tarayıcıda saklanır. Tıkla → yeniden yükle.</div>
+    <div class="modal-body"><ul id="savedList" class="saved-list"></ul></div>
+    <div class="modal-foot"><button id="savedClear" class="btn ghost small">Tümünü Sil</button></div>
+  </div>
+</div>
+
+<div id="pwModal" class="modal hidden">
+  <div class="modal-content narrow">
+    <div class="modal-head"><h3>🔐 Şifre Kasası</h3>
+      <button id="pwClose" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-tip">Şifreli PDF şifreleri. Sadece bu cihazda tutulur.</div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        <input type="text" id="pwName" placeholder="İsim (örn: Fatura Mart)" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:9px 11px;border-radius:8px;font-size:13.5px;font-family:inherit;outline:none;width:100%">
+        <input type="password" id="pwVal" placeholder="Şifre" style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:9px 11px;border-radius:8px;font-size:13.5px;font-family:inherit;outline:none;width:100%">
+        <button id="pwAdd" class="btn accent small">+ Ekle</button>
+      </div>
+      <ul id="pwList" class="history-list"></ul>
+    </div>
+  </div>
+</div>
+
+<div id="signModal" class="modal hidden">
+  <div class="modal-content narrow">
+    <div class="modal-head"><h3>✍️ İmza Çiz</h3>
+      <button id="signClose" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-tip">Parmakla veya fareyle imza çiz.</div>
+    <div class="modal-body">
+      <div class="sig-canvas-wrap"><canvas id="sigCanvas" width="600" height="240"></canvas></div>
+      <div class="sig-tools">
+        <button id="sigClear" class="btn ghost small">🗑 Temizle</button>
+        <button id="sigSave" class="btn accent small">✓ İmzayı Kaydet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="diffModal" class="modal hidden">
+  <div class="modal-content wide">
+    <div class="modal-head"><h3>🔍 Görsel Karşılaştırma</h3>
+      <button id="diffClose" class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div id="diffBody" class="modal-body"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<footer class="footer">
+  PDF Studio <span style="opacity:.4">·</span> <strong>MCT YAZILIM</strong>
+</footer>
+
+<script type="importmap">
+{
+  "imports": {
+    "pdf-lib":      "https://esm.sh/@cantoo/pdf-lib@2.4.4",
+    "pdfjs-dist":   "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.min.mjs",
+    "pdfjs-worker": "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs",
+    "jszip":        "https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm"
+  }
+}
+</script>
+<script type="module">
+import { PDFDocument, StandardFonts, rgb, degrees, PageSizes } from 'pdf-lib';
+import * as pdfjsLib from 'pdfjs-dist';
+import JSZip from 'jszip';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs-worker';
+
+const DEFAULT_MAX_PAGES = 100;
+const LIMIT_KEY = 'pdfstudio-nolimit';
+const HISTORY_KEY = 'pdfstudio-history';
+const PW_KEY = 'pdfstudio-passwords';
+const SIG_KEY = 'pdfstudio-signature';
+const FAV_KEY = 'pdfstudio-favs';
+const LARGE_PDF_WARN = 300;
+const LARGE_IMG_WARN_MB = 25;
+
+function getMaxPages() {
+  try { return localStorage.getItem(LIMIT_KEY) === '1' ? Infinity : DEFAULT_MAX_PAGES; }
+  catch { return DEFAULT_MAX_PAGES; }
+}
+
+const $ = s => document.querySelector(s);
+const state = { files: [], tool: null, busy: false, result: null, searchQuery: '', signaturePng: null };
+const fmtSize = b => b < 1024 ? b+' B' : b < 1048576 ? (b/1024).toFixed(1)+' KB' : (b/1048576).toFixed(2)+' MB';
+const tick = () => new Promise(r => setTimeout(r, 0));
+
+/* ===== INDEXEDDB ===== */
+let idb = null;
+try {
+  const req = indexedDB.open('pdfstudio', 2);
+  req.onupgradeneeded = e => {
+    const db = e.target.result;
+    if (db.objectStoreNames.contains('files')) db.deleteObjectStore('files');
+    db.createObjectStore('files', { keyPath: 'id' });
+  };
+  req.onsuccess = e => { idb = e.target.result; };
+  req.onerror = () => console.warn('IndexedDB unavailable');
+} catch (e) { console.warn(e); }
+
+async function saveFileToDb(file) {
+  if (!idb) return;
+  return new Promise(resolve => {
+    try {
+      const tx = idb.transaction('files', 'readwrite');
+      const store = tx.objectStore('files');
+      const id = file.name + '::' + file.size + '::' + Date.now();
+      store.put({ id, name: file.name, size: file.size, type: file.type, pages: file.pages, w: file.w, h: file.h, mime: file.mime, encrypted: file.encrypted, bytes: file.bytes, ts: Date.now() });
+      tx.oncomplete = async () => {
+        try {
+          const all = await getAllSavedFiles();
+          all.sort((a,b) => b.ts - a.ts);
+          all.slice(15).forEach(f => {
+            const tx2 = idb.transaction('files', 'readwrite');
+            tx2.objectStore('files').delete(f.id);
+          });
+        } catch {}
+        resolve();
+      };
+      tx.onerror = () => resolve();
+    } catch { resolve(); }
+  });
+}
+async function getAllSavedFiles() {
+  if (!idb) return [];
+  return new Promise(resolve => {
+    try {
+      const tx = idb.transaction('files', 'readonly');
+      const req = tx.objectStore('files').getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => resolve([]);
+    } catch { resolve([]); }
+  });
+}
+async function deleteSavedFile(id) {
+  if (!idb) return;
+  try {
+    const tx = idb.transaction('files', 'readwrite');
+    tx.objectStore('files').delete(id);
+  } catch {}
+}
+async function clearSavedFiles() {
+  if (!idb) return;
+  try {
+    const tx = idb.transaction('files', 'readwrite');
+    tx.objectStore('files').clear();
+  } catch {}
+}
+
+/* ===== HISTORY ===== */
+function getHistory() { try { return JSON.parse(localStorage.getItem(HISTORY_KEY)||'[]'); } catch { return []; } }
+function addHistory(entry) {
+  try {
+    const h = getHistory(); h.unshift({ ...entry, ts: Date.now() });
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 30)));
+    updateHistoryBadge();
+  } catch {}
+}
+function updateHistoryBadge() {
+  const h = getHistory(); const b = $('#historyBadge');
+  if (!b) return;
+  b.textContent = h.length; b.style.display = h.length ? 'flex' : 'none';
+}
+function renderHistory() {
+  const h = getHistory(); const list = $('#historyList');
+  if (!h.length) { list.innerHTML = '<div class="history-empty">Henüz işlem yok.</div>'; return; }
+  list.innerHTML = h.map(e => {
+    const time = new Date(e.ts).toLocaleString('tr-TR', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+    const tool = TOOLS[e.tool];
+    const saving = e.savings != null ? ` · <span class="saving">%${e.savings}</span>` : '';
+    return `<li class="history-item">
+      <div class="hi-icon">${tool?.icon || '📄'}</div>
+      <div class="hi-meta">
+        <div class="hi-title">${tool?.label || e.tool}</div>
+        <div class="hi-sub"><span>${e.output || ''}</span>${saving}<span style="margin-left:auto">${time}</span></div>
+      </div>
+    </li>`;
+  }).join('');
+}
+
+/* ===== FAVORITES ===== */
+function getFavs() { try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); } catch { return []; } }
+function toggleFav(id) {
+  const favs = getFavs();
+  const idx = favs.indexOf(id);
+  if (idx >= 0) favs.splice(idx, 1); else favs.push(id);
+  try { localStorage.setItem(FAV_KEY, JSON.stringify(favs)); } catch {}
+  renderToolGrid();
+  toast(idx >= 0 ? 'Favoriden çıkarıldı' : '⭐ Favorilere eklendi', 'success');
+}
+
+/* ===== PASSWORDS ===== */
+function getPasswords() {
+  try { const raw = JSON.parse(localStorage.getItem(PW_KEY)||'[]'); return raw.map(p => ({ ...p, pw: atob(p.pw) })); }
+  catch { return []; }
+}
+function savePasswords(list) {
+  try { localStorage.setItem(PW_KEY, JSON.stringify(list.map(p => ({ ...p, pw: btoa(p.pw) })))); }
+  catch { toast('Şifreler kaydedilemedi', 'error'); }
+}
+function addPassword(name, pw) {
+  const list = getPasswords();
+  list.unshift({ name, pw, id: Date.now() });
+  savePasswords(list);
+}
+function deletePassword(id) { savePasswords(getPasswords().filter(p => p.id !== id)); }
+function renderPasswords() {
+  const list = getPasswords();
+  const el = $('#pwList');
+  if (!list.length) { el.innerHTML = '<div class="history-empty">Henüz şifre yok.</div>'; return; }
+  el.innerHTML = list.map(p => `
+    <li class="pw-item">
+      <div class="pw-info">
+        <div class="pw-name">${p.name || '(isimsiz)'}</div>
+        <div class="pw-pw"><span class="dots">••••••••</span> <button data-act="toggle" data-id="${p.id}" style="background:transparent;border:none;color:var(--accent);font-size:11px;font-weight:600;cursor:pointer">Göster</button></div>
+      </div>
+      <div class="pw-actions">
+        <button data-act="copy" data-id="${p.id}" title="Kopyala"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+        <button data-act="del" data-id="${p.id}" title="Sil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg></button>
+      </div>
+    </li>
+  `).join('');
+  el.querySelectorAll('button[data-act]').forEach(b => {
+    const id = +b.dataset.id;
+    if (b.dataset.act === 'del') b.onclick = () => { deletePassword(id); renderPasswords(); toast('Silindi', 'success'); };
+    if (b.dataset.act === 'copy') b.onclick = () => {
+      const p = getPasswords().find(x => x.id === id);
+      if (p) navigator.clipboard.writeText(p.pw).then(() => toast('Kopyalandı', 'success')).catch(() => toast('Kopyalanamadı', 'error'));
+    };
+    if (b.dataset.act === 'toggle') b.onclick = () => {
+      const p = getPasswords().find(x => x.id === id);
+      const span = b.previousElementSibling;
+      if (p) {
+        if (span.textContent === '••••••••') { span.textContent = p.pw; b.textContent = 'Gizle'; }
+        else { span.textContent = '••••••••'; b.textContent = 'Göster'; }
+      }
+    };
+  });
+}
+
+/* ===== TOAST / STATUS ===== */
+function toast(msg, kind) {
+  const t = $('#toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'toast ' + (kind||'');
+  t.classList.remove('hidden');
+  clearTimeout(t._to);
+  t._to = setTimeout(() => t.classList.add('hidden'), 2800);
+}
+function setStatus(msg, kind) {
+  const s = $('#status'); if (!s) return;
+  s.className = 'status' + (kind ? ' '+kind : '');
+  if (kind === 'loading') s.innerHTML = '<span class="spinner"></span>' + (msg||'');
+  else s.textContent = msg || '';
+}
+function setProgress(pct) {
+  const w = $('#progressWrap'), b = $('#progressBar');
+  if (!w || !b) return;
+  if (pct == null) { w.classList.remove('active'); b.style.width = '0%'; return; }
+  w.classList.add('active'); b.style.width = Math.min(100, Math.max(0, pct)) + '%';
+}
+
+/* ===== HELPERS ===== */
+/* PATCH 1: parseRanges "1-", "-5", "3-5", "3" hepsi desteklenir */
+function parseRanges(str, max) {
+  const out = [];
+  if (!str?.trim()) return out;
+  for (const part of str.split(',')) {
+    const p = part.trim();
+    if (!p) continue;
+    let m = p.match(/^(\d+)\s*-\s*$/);
+    if (m) {
+      const a = parseInt(m[1], 10);
+      if (a >= 1 && a <= max) out.push([a, max]);
+      continue;
+    }
+    m = p.match(/^\s*-\s*(\d+)$/);
+    if (m) {
+      const b = parseInt(m[1], 10);
+      if (b >= 1 && b <= max) out.push([1, b]);
+      continue;
+    }
+    m = p.match(/^(\d+)(?:\s*-\s*(\d+))?$/);
+    if (!m) continue;
+    const a = parseInt(m[1], 10), b = m[2] ? parseInt(m[2], 10) : a;
+    if (a < 1 || a > max || b < a) continue;
+    out.push([a, Math.min(b, max)]);
+  }
+  return out;
+}
+function downloadBlob(bytes, name, mime) {
+  try {
+    const url = URL.createObjectURL(new Blob([bytes], { type: mime || 'application/pdf' }));
+    const a = document.createElement('a'); a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+  } catch { toast('İndirme başlatılamadı', 'error'); }
+}
+function renderPageToCanvas(page, scale) {
+  const viewport = page.getViewport({ scale });
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.ceil(viewport.width); canvas.height = Math.ceil(viewport.height);
+  const ctx = canvas.getContext('2d');
+  return page.render({ canvasContext: ctx, viewport }).promise.then(() => ({ canvas, viewport }));
+}
+async function loadPdf(bytes, password) {
+  try { return await PDFDocument.load(bytes, password ? { password } : {}); }
+  catch { throw new Error(password ? 'Şifre yanlış veya PDF bozuk.' : 'PDF açılamadı (şifreli olabilir).'); }
+}
+async function loadImageEl(bytes, mime) {
+  const blob = new Blob([bytes], { type: mime || 'image/png' });
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+  await new Promise((res, rej) => {
+    img.onload = () => { URL.revokeObjectURL(url); res(); };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('Görsel yüklenemedi')); };
+    img.src = url;
+  });
+  return img;
+}
+function drawToCanvas(img, w, h, bg) {
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(w));
+  c.height = Math.max(1, Math.round(h));
+  const ctx = c.getContext('2d');
+  if (bg) { ctx.fillStyle = bg; ctx.fillRect(0, 0, c.width, c.height); }
+  ctx.drawImage(img, 0, 0, c.width, c.height);
+  return c;
+}
+function canvasToBlobAsync(canvas, mime, quality) {
+  return new Promise(res => canvas.toBlob(b => res(b), mime, quality));
+}
+function buildIco(pngs) {
+  const n = pngs.length;
+  const header = new Uint8Array(6 + n * 16);
+  const dv = new DataView(header.buffer);
+  dv.setUint16(0, 0, true); dv.setUint16(2, 1, true); dv.setUint16(4, n, true);
+  let offset = 6 + n * 16;
+  pngs.forEach(({size, bytes}, i) => {
+    const e = 6 + i * 16;
+    dv.setUint8(e, size >= 256 ? 0 : size);
+    dv.setUint8(e+1, size >= 256 ? 0 : size);
+    dv.setUint16(e+4, 1, true); dv.setUint16(e+6, 32, true);
+    dv.setUint32(e+8, bytes.length, true); dv.setUint32(e+12, offset, true);
+    offset += bytes.length;
+  });
+  const total = header.length + pngs.reduce((s,p) => s + p.bytes.length, 0);
+  const out = new Uint8Array(total);
+  out.set(header, 0);
+  let o = header.length;
+  pngs.forEach(p => { out.set(p.bytes, o); o += p.bytes.length; });
+  return out;
+}
+
+/* ===== FILE HANDLING ===== */
+const ALLOWED_IMG_RE = /\.(png|jpe?g|webp)$/i;
+const ALLOWED_IMG_MIME_RE = /^image\/(png|jpeg|jpg|webp)$/i;
+
+/* PATCH 2: Şifreli PDF'ler listeye eklenir */
+async function addFiles(fileList) {
+  const list = [...fileList].filter(f => {
+    if (/\.pdf$/i.test(f.name) || f.type === 'application/pdf') return true;
+    if (ALLOWED_IMG_RE.test(f.name)) return true;
+    if (f.type && ALLOWED_IMG_MIME_RE.test(f.type)) return true;
+    return false;
+  });
+  if (!list.length) { toast('PDF, PNG, JPG veya WebP yok', 'error'); return; }
+
+  let ok = 0, fail = 0;
+  for (let i = 0; i < list.length; i++) {
+    const f = list[i];
+    try {
+      setStatus(`Okunuyor: ${f.name}…`, 'loading');
+      setProgress((i / list.length) * 100);
+      await tick();
+      const bytes = new Uint8Array(await f.arrayBuffer());
+      const isPdf = /\.pdf$/i.test(f.name) || f.type === 'application/pdf';
+
+      if (isPdf) {
+        let numPages = 0, encrypted = false;
+        try {
+          const pdf = await pdfjsLib.getDocument({ data: bytes.slice() }).promise;
+          numPages = pdf.numPages;
+        } catch (err) {
+          const name = err?.name || '', msg = err?.message || '';
+          if (/password/i.test(name) || /password/i.test(msg)) encrypted = true;
+          else { toast(`${f.name}: ${msg || err}`, 'error'); fail++; continue; }
+        }
+        if (!encrypted) {
+          const limit = getMaxPages();
+          if (numPages > limit) {
+            toast(`${f.name}: ${numPages} sayfa (maks ${limit === Infinity ? '∞' : limit})`, 'error');
+            fail++; continue;
+          }
+          if (limit === Infinity && numPages > LARGE_PDF_WARN) toast(`${f.name}: ${numPages} sayfa — yavaş olabilir`, 'info');
+        } else {
+          toast(`🔐 ${f.name}: şifreli — Şifre Çöz aracını kullan`, 'info');
+        }
+        const obj = { name: f.name, size: f.size, bytes, pages: numPages, type:'pdf', mime:'application/pdf', encrypted };
+        state.files.push(obj);
+        saveFileToDb(obj).catch(() => {});
+      } else {
+        let mime = f.type;
+        if (!mime || !mime.startsWith('image/')) {
+          if (/\.png$/i.test(f.name)) mime = 'image/png';
+          else if (/\.jpe?g$/i.test(f.name)) mime = 'image/jpeg';
+          else if (/\.webp$/i.test(f.name)) mime = 'image/webp';
+          else mime = 'image/png';
+        }
+        let w = 0, h = 0;
+        try {
+          const img = await loadImageEl(bytes, mime);
+          w = img.width; h = img.height;
+        } catch { toast(`${f.name}: görsel okunamadı`, 'error'); fail++; continue; }
+        if (f.size > LARGE_IMG_WARN_MB * 1024 * 1024) toast(`${f.name}: ${fmtSize(f.size)} — büyük görsel`, 'info');
+        const obj = { name: f.name, size: f.size, bytes, type:'image', mime, w, h };
+        state.files.push(obj);
+        saveFileToDb(obj).catch(() => {});
+      }
+      ok++;
+    } catch (e) { toast(`${f.name}: ${e.message||e}`, 'error'); fail++; }
+  }
+  setStatus(''); setProgress(null);
+  if (ok) toast(`${ok} dosya eklendi${fail ? ' · '+fail+' atlandı' : ''}`, 'success');
+  renderFileList();
+}
+
+const FILE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+const IMG_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
+const EYE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+const X_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+const GRIP_SVG = `<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>`;
+const STAR_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+
+let dragSrcIdx = null;
+
+function renderFileList() {
+  const sec = $('#filesSec'), list = $('#fileList'), tools = $('#toolsSection');
+  if (!state.files.length) {
+    sec.classList.add('hidden'); tools.classList.add('hidden');
+    $('#settingsPanel').classList.add('hidden');
+    $('#settingsPanel').dataset.currentTool = '';
+    $('#resultSec').classList.add('hidden');
+    state.tool = null; state.result = null;
+    return;
+  }
+  sec.classList.remove('hidden'); tools.classList.remove('hidden');
+  $('#fileCount').textContent = state.files.length;
+
+  list.innerHTML = state.files.map((f, i) => {
+    const isPdf = f.type === 'pdf';
+    const dims = isPdf
+      ? (f.encrypted ? '🔐 şifreli' : `${f.pages} sayfa`)
+      : (f.w && f.h ? `${f.w}×${f.h}` : 'boyut bilinmiyor');
+    return `<li class="file-item" draggable="${!state.busy}" data-idx="${i}">
+      <div class="drag-handle">${GRIP_SVG}</div>
+      <div class="file-icon">${isPdf ? FILE_SVG : IMG_SVG}</div>
+      <div class="file-info">
+        <div class="file-name" title="${f.name}">${f.name}</div>
+        <div class="file-meta">
+          <span>${fmtSize(f.size)}</span>
+          <span>${dims}</span>
+          <span class="file-badge">${isPdf ? (f.encrypted ? '🔐 PDF' : 'PDF') : (f.mime||'').split('/')[1]||'IMG'}</span>
+        </div>
+      </div>
+      <div class="file-actions">
+        <button data-act="preview" data-i="${i}" title="Önizle" ${state.busy?'disabled':''}>${EYE_SVG}</button>
+        <button data-act="remove" data-i="${i}" title="Kaldır" ${state.busy?'disabled':''}>${X_SVG}</button>
+      </div>
+    </li>`;
+  }).join('');
+
+  list.querySelectorAll('button[data-act]').forEach(b => {
+    const i = +b.dataset.i;
+    if (state.busy) return;
+    if (b.dataset.act === 'remove') b.onclick = () => {
+      state.files.splice(i,1);
+      state.result = null;
+      $('#resultSec').classList.add('hidden');
+      if (!state.files.length) {
+        state.tool = null;
+        $('#settingsPanel').classList.add('hidden');
+        $('#settingsPanel').dataset.currentTool = '';
+      }
+      renderFileList();
+    };
+    if (b.dataset.act === 'preview') b.onclick = () => {
+      const f = state.files[i];
+      try { window.open(URL.createObjectURL(new Blob([f.bytes], { type: f.mime })), '_blank'); }
+      catch { toast('Önizleme açılamadı', 'error'); }
+    };
+  });
+
+  if (!state.busy) {
+    list.querySelectorAll('.file-item').forEach(li => {
+      li.ondragstart = (e) => { dragSrcIdx = +li.dataset.idx; li.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; };
+      li.ondragend = () => li.classList.remove('dragging');
+      li.ondragover = (e) => { e.preventDefault(); li.classList.add('drag-over'); };
+      li.ondragleave = () => li.classList.remove('drag-over');
+      li.ondrop = (e) => {
+        e.preventDefault();
+        const destIdx = +li.dataset.idx;
+        if (dragSrcIdx == null || dragSrcIdx === destIdx) return;
+        const [moved] = state.files.splice(dragSrcIdx, 1);
+        state.files.splice(destIdx, 0, moved);
+        dragSrcIdx = null;
+        renderFileList();
+      };
+    });
+  }
+
+  renderToolGrid();
+  if (state.tool) renderToolPanel();
+}
+
+function filesFor(t) {
+  if (!t) return state.files;
+  if (t.targetType === 'image') return state.files.filter(f => f.type === 'image');
+  if (t.targetType === 'pdf') return state.files.filter(f => f.type === 'pdf');
+  return state.files;
+}
+
+function lockUI(locked) {
+  state.busy = locked;
+  document.body.classList.toggle('busy-lock', locked);
+  const runBtn = $('#runBtn'), batchBtn = $('#batchBtn');
+  if (runBtn) runBtn.disabled = locked;
+  if (batchBtn) batchBtn.disabled = locked;
+  document.querySelectorAll('#fileList button[data-act]').forEach(b => b.disabled = locked);
+  document.querySelectorAll('#fileList .file-item').forEach(li => li.draggable = !locked);
+  document.querySelectorAll('.tool-btn').forEach(b => { if (!b.classList.contains('disabled')) b.disabled = locked; });
+}
+
+/* ===== TOOL META ===== */
+/* PATCH 3a: tts kaldırıldı */
+const TOOL_META = {
+  merge:        { panel:'pdf', group:'Düzenle' },
+  split:        { panel:'pdf', group:'Düzenle' },
+  delete:       { panel:'pdf', group:'Düzenle' },
+  duplicate:    { panel:'pdf', group:'Düzenle' },
+  reorder:      { panel:'pdf', group:'Düzenle' },
+  reverse:      { panel:'pdf', group:'Düzenle' },
+  blank:        { panel:'pdf', group:'Düzenle' },
+  rotate:       { panel:'pdf', group:'Düzenle' },
+  crop:         { panel:'pdf', group:'Düzenle' },
+  nup:          { panel:'pdf', group:'Düzenle' },
+  compress:     { panel:'pdf', group:'Optimize' },
+  target:       { panel:'pdf', group:'Optimize' },
+  dpi:          { panel:'pdf', group:'Optimize' },
+  grayscale:    { panel:'pdf', group:'Optimize' },
+  scale:        { panel:'pdf', group:'Optimize' },
+  night:        { panel:'pdf', group:'Optimize' },
+  sepia:        { panel:'pdf', group:'Optimize' },
+  pagenum:      { panel:'pdf', group:'İçerik' },
+  headerfooter: { panel:'pdf', group:'İçerik' },
+  watermark:    { panel:'pdf', group:'İçerik' },
+  border:       { panel:'pdf', group:'İçerik' },
+  bg:           { panel:'pdf', group:'İçerik' },
+  qrwm:         { panel:'pdf', group:'İçerik' },
+  imgwm:        { panel:'pdf', group:'İçerik' },
+  sign:         { panel:'pdf', group:'İçerik' },
+  meta:         { panel:'pdf', group:'Meta & Analiz' },
+  cleanmeta:    { panel:'pdf', group:'Meta & Analiz' },
+  report:       { panel:'pdf', group:'Meta & Analiz' },
+  fontlist:     { panel:'pdf', group:'Meta & Analiz' },
+  sha256:       { panel:'pdf', group:'Meta & Analiz' },
+  totext:       { panel:'pdf', group:'Meta & Analiz' },
+  ocr:          { panel:'pdf', group:'Meta & Analiz' },
+  search:       { panel:'pdf', group:'Meta & Analiz' },
+  diff:         { panel:'pdf', group:'Meta & Analiz' },
+  encrypt:      { panel:'pdf', group:'Güvenlik' },
+  decrypt:      { panel:'pdf', group:'Güvenlik' },
+  tojpg:        { panel:'visual', group:'PDF → Görsel' },
+  topng:        { panel:'visual', group:'PDF → Görsel' },
+  images:       { panel:'visual', group:'Görsel → PDF' },
+  textpdf:      { panel:'visual', group:'Oluştur' },
+  pngToJpg:     { panel:'visual', group:'Görsel Dönüştür' },
+  pngToWebp:    { panel:'visual', group:'Görsel Dönüştür' },
+  pngToIco:     { panel:'visual', group:'Görsel Dönüştür' },
+  imgCompress:  { panel:'visual', group:'Görsel Optimize' },
+  imgResize:    { panel:'visual', group:'Görsel Optimize' },
+  imgGrayscale: { panel:'visual', group:'Görsel Optimize' },
+  imgFlatten:   { panel:'visual', group:'Görsel Optimize' },
+};
+
+/* ===== TOOLS ===== */
+/* PATCH 3b: tts kaldırıldı. PATCH 9: sıkıştır hafif yeniden kopyalama. PATCH 8: WebP fallback. PATCH 2: decrypt güncellendi. */
+const TOOLS = {
+  merge: { icon:'🔗', label:'Birleştir', desc:'Birden fazla PDF tek dosyada', need:'multi', targetType:'pdf',
+    opts:() => `<small>Dosyalar listedeki sırayla birleştirilir.</small>`,
+    run: async () => {
+      const out = await PDFDocument.create();
+      for (let i = 0; i < state.files.length; i++) {
+        setProgress((i/state.files.length)*100); await tick();
+        const src = await loadPdf(state.files[i].bytes);
+        const pages = await out.copyPages(src, src.getPageIndices());
+        pages.forEach(p => out.addPage(p));
+      }
+      return { name: 'birlestirilmis.pdf', bytes: await out.save({ useObjectStreams: true }) };
+    }
+  },
+  split: { icon:'✂️', label:'Ayır', desc:'Sayfa aralıklarına böl', need:'one', targetType:'pdf',
+    opts:() => `<label>Sayfa aralıkları<input type="text" id="opt-ranges" value="1-1" placeholder="örn: 1-3,5"/><small>Tek aralık → tek PDF. Birden fazla → ZIP. "1-" tüm sayfalar.</small></label>`,
+    run: async () => {
+      const f = state.files[0]; const src = await loadPdf(f.bytes);
+      let ranges = parseRanges($('#opt-ranges').value, src.getPageCount());
+      if (!ranges.length) ranges = Array.from({length: src.getPageCount()}, (_,i)=>[i+1,i+1]);
+      if (ranges.length === 1) {
+        const out = await PDFDocument.create();
+        const [a,b] = ranges[0];
+        const idxs = Array.from({length:b-a+1},(_,i)=>a-1+i);
+        const pages = await out.copyPages(src, idxs); pages.forEach(p=>out.addPage(p));
+        return { name: `ayrilmis_${a}-${b}.pdf`, bytes: await out.save() };
+      }
+      const zip = new JSZip();
+      for (let k=0; k<ranges.length; k++) {
+        setProgress((k/ranges.length)*100); await tick();
+        const [a,b] = ranges[k];
+        const out = await PDFDocument.create();
+        const idxs = Array.from({length:b-a+1},(_,i)=>a-1+i);
+        const pages = await out.copyPages(src, idxs); pages.forEach(p=>out.addPage(p));
+        zip.file(`bolum_${k+1}_${a}-${b}.pdf`, await out.save());
+      }
+      return { name: 'parcalar.zip', bytes: await zip.generateAsync({type:'uint8array'}), zip: true };
+    }
+  },
+  delete: { icon:'🗑️', label:'Sayfa Sil', desc:'Belirli sayfaları çıkar', need:'one', targetType:'pdf',
+    opts:() => `<label>Silinecek sayfalar<input type="text" id="opt-ranges" value="1" placeholder="örn: 1,3-5"/></label>`,
+    run: async () => {
+      const f = state.files[0]; const src = await loadPdf(f.bytes);
+      const del = parseRanges($('#opt-ranges').value, src.getPageCount());
+      if (!del.length) throw new Error('Geçerli aralık girin.');
+      const ds = new Set(); del.forEach(([a,b])=>{for(let i=a;i<=b;i++)ds.add(i-1);});
+      const keep = src.getPageIndices().filter(i=>!ds.has(i));
+      if (!keep.length) throw new Error('Tüm sayfalar silinemez.');
+      const out = await PDFDocument.create();
+      const pages = await out.copyPages(src, keep); pages.forEach(p=>out.addPage(p));
+      return { name: f.name.replace(/\.pdf$/i,'')+'_kalan.pdf', bytes: await out.save() };
+    }
+  },
+  duplicate: { icon:'📑', label:'Sayfa Çoğalt', desc:'Belirli sayfaları kopyala', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>Çoğaltılacak sayfalar<input type="text" id="opt-ranges" value="1" placeholder="örn: 1,3-5"/></label>
+      <label>Kaç kez<input type="number" id="opt-count" value="1" min="1" max="10"/></label>
+      <small>Belirtilen sayfalar kendi yerlerinden hemen sonra kopyalanır.</small>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const src = await loadPdf(f.bytes);
+      const ranges = parseRanges($('#opt-ranges').value, src.getPageCount());
+      if (!ranges.length) throw new Error('Geçerli aralık girin.');
+      const count = parseInt($('#opt-count').value, 10) || 1;
+      const dupSet = new Set();
+      ranges.forEach(([a,b]) => { for (let i=a;i<=b;i++) dupSet.add(i-1); });
+      const out = await PDFDocument.create();
+      const indices = src.getPageIndices();
+      for (const idx of indices) {
+        const [copied] = await out.copyPages(src, [idx]);
+        out.addPage(copied);
+        if (dupSet.has(idx)) {
+          for (let k = 0; k < count; k++) {
+            const [dup] = await out.copyPages(src, [idx]);
+            out.addPage(dup);
+          }
+        }
+      }
+      return { name: f.name.replace(/\.pdf$/i,'')+'_kopyali.pdf', bytes: await out.save() };
+    }
+  },
+  reorder: { icon:'🔀', label:'Sırala', desc:'Sayfaları yeniden sırala', need:'one', targetType:'pdf', hideRun:true,
+    opts:() => `<button id="openReorder" class="btn accent small">Editörü Aç</button><small>Sayfaları görsel olarak yeniden sırala.</small>`,
+    run: null
+  },
+  reverse: { icon:'↩️', label:'Ters Çevir', desc:'Sayfa sırasını tersine çevir', need:'one', targetType:'pdf',
+    opts:() => `<small>Sayfa sırasını tersine çevirir.</small>`,
+    run: async () => {
+      const f = state.files[0]; const src = await loadPdf(f.bytes);
+      const out = await PDFDocument.create();
+      const pages = await out.copyPages(src, src.getPageIndices().reverse());
+      pages.forEach(p=>out.addPage(p));
+      return { name: f.name.replace(/\.pdf$/i,'')+'_ters.pdf', bytes: await out.save() };
+    }
+  },
+  blank: { icon:'➕', label:'Boş Sayfa', desc:'PDF\'ye boş sayfa ekle', need:'one', targetType:'pdf',
+    opts:() => `<label>Pozisyon<select id="opt-pos"><option value="end">Sona</option><option value="start">Başa</option><option value="each">Her sayfadan sonra</option></select></label><label>Kaç sayfa<input type="number" id="opt-count" value="1" min="1" max="50"/></label>`,
+    run: async () => {
+      const f = state.files[0]; const src = await loadPdf(f.bytes);
+      const pos = $('#opt-pos').value; const count = parseInt($('#opt-count').value,10)||1;
+      const out = await PDFDocument.create();
+      const size0 = src.getPage(0).getSize();
+      const addBlank = () => { for(let i=0;i<count;i++) out.addPage([size0.width, size0.height]); };
+      if (pos==='start') addBlank();
+      const pages = await out.copyPages(src, src.getPageIndices());
+      for (let i=0;i<pages.length;i++){ out.addPage(pages[i]); if (pos==='each') addBlank(); }
+      if (pos==='end') addBlank();
+      return { name: f.name.replace(/\.pdf$/i,'')+'_boslu.pdf', bytes: await out.save() };
+    }
+  },
+  rotate: { icon:'🔄', label:'Döndür', desc:'Sayfaları döndür', need:'one', targetType:'pdf',
+    opts:() => `<label>Sayfa aralığı<input type="text" id="opt-ranges" value="1-" placeholder="örn: 1-, 2-5"/></label>
+      <label>Açı<select id="opt-angle"><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select></label>`,
+    run: async () => {
+      const f = state.files[0]; const doc = await loadPdf(f.bytes);
+      const ranges = parseRanges($('#opt-ranges').value || '1-', doc.getPageCount());
+      if (!ranges.length) throw new Error('Geçerli aralık girin (örn: 1- veya 2-5).');
+      const angle = parseInt($('#opt-angle').value,10);
+      const pages = doc.getPages();
+      ranges.forEach(([a,b]) => { for (let i=a;i<=b;i++){ const p=pages[i-1]; if (p) p.setRotation(degrees(((p.getRotation().angle||0)+angle)%360)); } });
+      return { name: f.name.replace(/\.pdf$/i,'')+'_dondurulmus.pdf', bytes: await doc.save() };
+    }
+  },
+  crop: { icon:'🖼️', label:'Kırp', desc:'Kenar boşluklarını kes', need:'one', targetType:'pdf',
+    opts:() => `<label>Kenar boşluğu (pt)<input type="number" id="opt-margin" value="20" min="0" max="200"/></label>`,
+    run: async () => {
+      const f = state.files[0]; const doc = await loadPdf(f.bytes);
+      const m = parseFloat($('#opt-margin').value)||0;
+      doc.getPages().forEach(p => {
+        const { x, y, width, height } = p.getMediaBox();
+        p.setCropBox(x+m, y+m, Math.max(10,width-m*2), Math.max(10,height-m*2));
+      });
+      return { name: f.name.replace(/\.pdf$/i,'')+'_kirpilmis.pdf', bytes: await doc.save() };
+    }
+  },
+  nup: { icon:'📄', label:'N-up', desc:'2/4 sayfa tek yaprakta', need:'one', targetType:'pdf',
+    opts:() => `<label>Sayfa başına<select id="opt-n"><option value="2" selected>2</option><option value="4">4</option></select></label>`,
+    run: async () => {
+      const f = state.files[0]; const n = parseInt($('#opt-n').value,10);
+      const pdf = await pdfjsLib.getDocument({ data: f.bytes.slice() }).promise;
+      const cols = 2, rows = n===4?2:1;
+      const out = await PDFDocument.create();
+      const A4 = PageSizes.A4;
+      const cw = A4[0]/cols, ch = A4[1]/rows;
+      for (let i=1; i<=pdf.numPages; i+=n) {
+        setProgress((i/pdf.numPages)*100); await tick();
+        const page = out.addPage([A4[0], A4[1]]);
+        for (let k=0; k<n && i+k<=pdf.numPages; k++) {
+          const src = await pdf.getPage(i+k);
+          const { canvas } = await renderPageToCanvas(src, 1.2);
+          const blob = await new Promise(r => canvas.toBlob(r,'image/jpeg',0.85));
+          const img = await out.embedJpg(new Uint8Array(await blob.arrayBuffer()));
+          const col = k%cols, row = Math.floor(k/cols);
+          const s = Math.min(cw/img.width, ch/img.height)*0.96;
+          const w = img.width*s, h = img.height*s;
+          page.drawImage(img, { x:col*cw+(cw-w)/2, y:A4[1]-(row+1)*ch+(ch-h)/2, width:w, height:h });
+        }
+      }
+      return { name: f.name.replace(/\.pdf$/i,'')+`_${n}up.pdf`, bytes: await out.save() };
+    }
+  },
+
+  compress: { icon:'🗜️', label:'Sıkıştır', desc:'Boyutu küçült', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>Kalite<div class="radio-row">
+        <label><input type="radio" name="clvl" value="light"> Hafif</label>
+        <label><input type="radio" name="clvl" value="medium" checked> Orta</label>
+        <label><input type="radio" name="clvl" value="super"> Süper</label>
+      </div><small>Hafif: metin korunur · Orta: 150 DPI JPEG %75 · Süper: 96 DPI JPEG %50</small></label>`,
+    run: async (fileObj) => {
+      const lvl = document.querySelector('input[name=clvl]:checked').value;
+      const f = fileObj || state.files[0]; let bytes;
+      /* PATCH 9: Hafif modda sayfaları yeni belgeye kopyala (temizlik) */
+      if (lvl === 'light') {
+        const src = await loadPdf(f.bytes);
+        const out = await PDFDocument.create();
+        const pages = await out.copyPages(src, src.getPageIndices());
+        pages.forEach(p => out.addPage(p));
+        bytes = await out.save({ useObjectStreams: true });
+      } else {
+        const cfg = lvl === 'medium' ? {dpi:150,q:0.75} : {dpi:96,q:0.5};
+        bytes = await rebuildAsImages(f.bytes, cfg.dpi, cfg.q, null);
+      }
+      return { name: f.name.replace(/\.pdf$/i,'')+'_sikistirilmis.pdf', bytes, originalSize: f.size };
+    }
+  },
+  target: { icon:'🎯', label:'Hedef Boyut', desc:'Belirli MB altına düşür', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>Hedef boyut (MB)<input type="number" id="opt-target" value="2" min="0.1" step="0.1"/></label><small>Otomatik DPI ve kalite düşürür.</small>`,
+    run: async (fileObj) => {
+      const targetMB = parseFloat($('#opt-target').value);
+      if (!targetMB || targetMB <= 0) throw new Error('Geçerli boyut girin.');
+      const targetBytes = targetMB * 1024 * 1024;
+      const f = fileObj || state.files[0];
+      if (f.size <= targetBytes) {
+        const doc = await loadPdf(f.bytes);
+        return { name: f.name.replace(/\.pdf$/i,'')+'_hedef.pdf', bytes: await doc.save({ useObjectStreams: true }), originalSize: f.size };
+      }
+      const tries = [
+        { dpi: 200, q: 0.85 }, { dpi: 150, q: 0.75 }, { dpi: 120, q: 0.65 },
+        { dpi: 96, q: 0.55 }, { dpi: 72, q: 0.45 }, { dpi: 60, q: 0.35 }, { dpi: 48, q: 0.25 },
+      ];
+      let bestBytes = null;
+      for (let i = 0; i < tries.length; i++) {
+        const cfg = tries[i];
+        setProgress((i / tries.length) * 100);
+        setStatus(`Deneme ${i+1}/${tries.length}: ${cfg.dpi} DPI…`, 'loading'); await tick();
+        const bytes = await rebuildAsImages(f.bytes, cfg.dpi, cfg.q, null);
+        bestBytes = bytes;
+        if (bytes.byteLength <= targetBytes) {
+          return { name: f.name.replace(/\.pdf$/i,'')+'_hedef.pdf', bytes, originalSize: f.size };
+        }
+      }
+      return { name: f.name.replace(/\.pdf$/i,'')+'_hedef.pdf', bytes: bestBytes, originalSize: f.size };
+    }
+  },
+  dpi: { icon:'📉', label:'DPI Düşür', desc:'Çözünürlüğü azalt', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>Hedef DPI<select id="opt-dpi"><option value="72">72</option><option value="96" selected>96</option><option value="120">120</option><option value="150">150</option><option value="200">200</option></select></label>`,
+    run: async (fileObj) => {
+      const dpi = parseInt($('#opt-dpi').value,10);
+      const f = fileObj || state.files[0];
+      const bytes = await rebuildAsImages(f.bytes, dpi, 0.8, null);
+      return { name: f.name.replace(/\.pdf$/i,'')+`_${dpi}dpi.pdf`, bytes, originalSize: f.size };
+    }
+  },
+  grayscale: { icon:'⚫', label:'Gri Ton', desc:'Siyah-beyaz yap', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>DPI<select id="opt-dpi"><option value="96">96</option><option value="150" selected>150</option><option value="200">200</option></select></label>`,
+    run: async (fileObj) => {
+      const dpi = parseInt($('#opt-dpi').value,10);
+      const f = fileObj || state.files[0];
+      const bytes = await rebuildAsImages(f.bytes, dpi, 0.85, 'gray');
+      return { name: f.name.replace(/\.pdf$/i,'')+'_gri.pdf', bytes, originalSize: f.size };
+    }
+  },
+  night: { icon:'🌙', label:'Gece Modu', desc:'Koyu arka plan', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>DPI<select id="opt-dpi"><option value="96">96</option><option value="120" selected>120</option><option value="150">150</option></select></label>`,
+    run: async (fileObj) => {
+      const dpi = parseInt($('#opt-dpi').value,10);
+      const f = fileObj || state.files[0];
+      const bytes = await rebuildAsImages(f.bytes, dpi, 0.85, 'night');
+      return { name: f.name.replace(/\.pdf$/i,'')+'_gece.pdf', bytes, originalSize: f.size };
+    }
+  },
+  sepia: { icon:'📜', label:'Sepya', desc:'Eski kağıt tonu', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>DPI<select id="opt-dpi"><option value="96">96</option><option value="120" selected>120</option><option value="150">150</option></select></label>`,
+    run: async (fileObj) => {
+      const dpi = parseInt($('#opt-dpi').value,10);
+      const f = fileObj || state.files[0];
+      const bytes = await rebuildAsImages(f.bytes, dpi, 0.85, 'sepia');
+      return { name: f.name.replace(/\.pdf$/i,'')+'_sepya.pdf', bytes, originalSize: f.size };
+    }
+  },
+  scale: { icon:'📐', label:'Boyutlandır', desc:'A4/Letter\'a sığdır', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>Hedef<select id="opt-size"><option value="a4">A4</option><option value="letter">Letter</option><option value="a3">A3</option><option value="a5">A5</option></select></label>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0]; const target = $('#opt-size').value;
+      const dim = target==='letter'?PageSizes.Letter:target==='a3'?PageSizes.A3:target==='a5'?PageSizes.A5:PageSizes.A4;
+      const bytes = await rebuildAsImages(f.bytes, 150, 0.85, null, dim);
+      return { name: f.name.replace(/\.pdf$/i,'')+`_${target}.pdf`, bytes, originalSize: f.size };
+    }
+  },
+
+  pagenum: { icon:'#️⃣', label:'Sayfa No', desc:'Numara ekle', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>Pozisyon<select id="opt-pos"><option value="bottom-center">Alt orta</option><option value="bottom-right">Alt sağ</option><option value="bottom-left">Alt sol</option><option value="top-center">Üst orta</option><option value="top-right">Üst sağ</option><option value="top-left">Üst sol</option></select></label>
+      <label>Format<select id="opt-fmt"><option value="n">1, 2, 3</option><option value="n-of-t">1 / 10</option><option value="page-n">Sayfa 1</option></select></label>
+      <label>Başlangıç<input type="number" id="opt-start" value="1" min="1"/></label>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0]; const doc = await loadPdf(f.bytes);
+      const font = await doc.embedFont(StandardFonts.Helvetica);
+      const pos = $('#opt-pos').value, fmt = $('#opt-fmt').value;
+      const start = parseInt($('#opt-start').value,10)||1;
+      const total = doc.getPageCount();
+      doc.getPages().forEach((p,i) => {
+        const num = start+i;
+        const label = fmt==='n-of-t' ? `${num} / ${total}` : fmt==='page-n' ? `Sayfa ${num}` : `${num}`;
+        const { width, height } = p.getSize();
+        const size = 11; const tw = font.widthOfTextAtSize(label, size);
+        let x = 20, y = 20;
+        if (pos.endsWith('center')) x = (width-tw)/2;
+        if (pos.endsWith('right')) x = width-tw-20;
+        if (pos.startsWith('top')) y = height-20;
+        p.drawText(label, { x, y, size, font, color: rgb(0.3,0.3,0.3) });
+      });
+      return { name: f.name.replace(/\.pdf$/i,'')+'_numarali.pdf', bytes: await doc.save() };
+    }
+  },
+  headerfooter: { icon:'📰', label:'Üst/Alt', desc:'Başlık ve dipnot', need:'one', targetType:'pdf',
+    opts:() => `<label>Üst bilgi<input type="text" id="opt-header"/></label><label>Alt bilgi<input type="text" id="opt-footer"/></label>
+      <label>Hizalama<select id="opt-align"><option value="center">Orta</option><option value="left">Sol</option><option value="right">Sağ</option></select></label>`,
+    run: async () => {
+      const f = state.files[0]; const doc = await loadPdf(f.bytes);
+      const font = await doc.embedFont(StandardFonts.Helvetica);
+      const header = $('#opt-header').value, footer = $('#opt-footer').value;
+      const align = $('#opt-align').value;
+      if (!header && !footer) throw new Error('En az bir metin girin.');
+      doc.getPages().forEach(p => {
+        const { width, height } = p.getSize(); const size = 10;
+        const draw = (text, y) => {
+          if (!text) return;
+          const tw = font.widthOfTextAtSize(text, size);
+          const x = align==='left' ? 20 : align==='right' ? width-tw-20 : (width-tw)/2;
+          p.drawText(text, { x, y, size, font, color: rgb(0.35,0.35,0.35) });
+        };
+        draw(header, height-28); draw(footer, 18);
+      });
+      return { name: f.name.replace(/\.pdf$/i,'')+'_bilgi.pdf', bytes: await doc.save() };
+    }
+  },
+  watermark: { icon:'💧', label:'Filigran', desc:'Yarı saydam metin', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>Metin<input type="text" id="opt-text" value="GİZLİ" maxlength="40"/></label>
+      <label>Renk<select id="opt-color"><option value="red" selected>Kırmızı</option><option value="gray">Gri</option><option value="blue">Mavi</option></select></label>
+      <label>Saydamlık<select id="opt-op"><option value="0.15">Düşük</option><option value="0.3" selected>Orta</option><option value="0.5">Yüksek</option></select></label>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0]; const doc = await loadPdf(f.bytes);
+      const font = await doc.embedFont(StandardFonts.HelveticaBold);
+      const text = $('#opt-text').value || 'GİZLİ';
+      const col = $('#opt-color').value, op = parseFloat($('#opt-op').value);
+      const color = col==='red' ? rgb(0.86,0.15,0.15) : col==='blue' ? rgb(0.2,0.4,0.86) : rgb(0.5,0.5,0.5);
+      doc.getPages().forEach(p => {
+        const { width, height } = p.getSize();
+        const size = Math.min(width,height)*0.09;
+        const tw = font.widthOfTextAtSize(text, size);
+        p.drawText(text, { x:(width-tw)/2, y:height*0.45, size, font, color, opacity:op, rotate:degrees(35) });
+      });
+      return { name: f.name.replace(/\.pdf$/i,'')+'_filigran.pdf', bytes: await doc.save() };
+    }
+  },
+  border: { icon:'🖼️', label:'Kenarlık', desc:'Sayfa çerçevesi', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>Kalınlık (pt)<input type="number" id="opt-width" value="3" min="1" max="30"/></label>
+      <label>Renk<input type="color" id="opt-color" value="#000000"/></label>
+      <label>Kenar boşluğu (pt)<input type="number" id="opt-margin" value="20" min="0" max="100"/></label>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const doc = await loadPdf(f.bytes);
+      const w = parseFloat($('#opt-width').value) || 3;
+      const hex = $('#opt-color').value || '#000000';
+      const m = parseFloat($('#opt-margin').value) || 20;
+      const r = parseInt(hex.slice(1,3),16)/255;
+      const g = parseInt(hex.slice(3,5),16)/255;
+      const b = parseInt(hex.slice(5,7),16)/255;
+      doc.getPages().forEach(p => {
+        const { width, height } = p.getSize();
+        p.drawRectangle({
+          x: m, y: m,
+          width: width - m*2,
+          height: height - m*2,
+          borderColor: rgb(r, g, b),
+          borderWidth: w,
+        });
+      });
+      return { name: f.name.replace(/\.pdf$/i,'')+'_kenarli.pdf', bytes: await doc.save() };
+    }
+  },
+  bg: { icon:'🎨', label:'Arka Plan', desc:'Sayfa arka planı', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>Renk<input type="color" id="opt-bg" value="#fef3c7"/></label>
+      <label>Saydamlık<select id="opt-op"><option value="1">Tam (içeriği kapatır)</option><option value="0.3" selected>Orta</option><option value="0.15">Düşük (vurgu)</option></select></label>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const doc = await loadPdf(f.bytes);
+      const hex = $('#opt-bg').value || '#fef3c7';
+      const op = parseFloat($('#opt-op').value);
+      const r = parseInt(hex.slice(1,3),16)/255;
+      const g = parseInt(hex.slice(3,5),16)/255;
+      const b = parseInt(hex.slice(5,7),16)/255;
+      doc.getPages().forEach(p => {
+        const { width, height } = p.getSize();
+        p.drawRectangle({ x: 0, y: 0, width, height, color: rgb(r, g, b), opacity: op });
+      });
+      return { name: f.name.replace(/\.pdf$/i,'')+'_arkaplan.pdf', bytes: await doc.save() };
+    }
+  },
+  qrwm: { icon:'📱', label:'QR Filigran', desc:'QR kod yapıştır', need:'one', targetType:'pdf',
+    opts:() => `<label>QR içeriği<input type="text" id="opt-qrtext" value="https://mctyazilim.com"/></label>
+      <label>Pozisyon<select id="opt-qrpos"><option value="bottom-right" selected>Alt sağ</option><option value="bottom-left">Alt sol</option><option value="top-right">Üst sağ</option><option value="top-left">Üst sol</option><option value="center">Orta</option></select></label>
+      <label>Boyut (pt)<input type="number" id="opt-qrsize" value="80" min="20" max="300"/></label>`,
+    run: async () => {
+      const text = $('#opt-qrtext').value.trim();
+      if (!text) throw new Error('QR içeriği girin.');
+      const pos = $('#opt-qrpos').value;
+      const size = parseFloat($('#opt-qrsize').value)||80;
+      setStatus('QR kod üretiliyor…', 'loading'); await tick();
+      const qrDataUrl = await new Promise((res, rej) => {
+        QRCode.toDataURL(text, { margin: 1, width: 300 }, (err, url) => err ? rej(err) : res(url));
+      });
+      const pngBytes = Uint8Array.from(atob(qrDataUrl.split(',')[1]), c => c.charCodeAt(0));
+      const f = state.files[0]; const doc = await loadPdf(f.bytes);
+      const img = await doc.embedPng(pngBytes);
+      doc.getPages().forEach(p => {
+        const { width, height } = p.getSize();
+        let x, y;
+        if (pos === 'bottom-right') { x = width - size - 20; y = 20; }
+        else if (pos === 'bottom-left') { x = 20; y = 20; }
+        else if (pos === 'top-right') { x = width - size - 20; y = height - size - 20; }
+        else if (pos === 'top-left') { x = 20; y = height - size - 20; }
+        else { x = (width - size)/2; y = (height - size)/2; }
+        p.drawImage(img, { x, y, width: size, height: size });
+      });
+      return { name: f.name.replace(/\.pdf$/i,'')+'_qr.pdf', bytes: await doc.save() };
+    }
+  },
+  imgwm: { icon:'🖼️', label:'Resim Filigran', desc:'Logo yapıştır', need:'one', targetType:'pdf',
+    opts:() => `<label>Filigran görseli<input type="file" id="opt-imgfile" accept="image/png,image/jpeg"/></label>
+      <label>Pozisyon<select id="opt-imgpos"><option value="bottom-right" selected>Alt sağ</option><option value="bottom-left">Alt sol</option><option value="top-right">Üst sağ</option><option value="top-left">Üst sol</option><option value="center">Orta</option></select></label>
+      <label>Genişlik (pt)<input type="number" id="opt-imgw" value="120" min="20" max="400"/></label>
+      <label>Saydamlık<select id="opt-imgop"><option value="1">Tam</option><option value="0.5">Orta</option><option value="0.25">Düşük</option></select></label>`,
+    run: async () => {
+      const input = document.getElementById('opt-imgfile');
+      if (!input?.files.length) throw new Error('Görsel seçin.');
+      const file = input.files[0];
+      const pos = $('#opt-imgpos').value;
+      const w = parseFloat($('#opt-imgw').value)||120;
+      const op = parseFloat($('#opt-imgop').value);
+      const f = state.files[0]; const doc = await loadPdf(f.bytes);
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      let img;
+      if (/\.png$/i.test(file.name) || file.type === 'image/png') img = await doc.embedPng(bytes);
+      else img = await doc.embedJpg(bytes);
+      const h = (w / img.width) * img.height;
+      doc.getPages().forEach(p => {
+        const { width: pw, height: ph } = p.getSize();
+        let x, y;
+        if (pos === 'bottom-right') { x = pw - w - 20; y = 20; }
+        else if (pos === 'bottom-left') { x = 20; y = 20; }
+        else if (pos === 'top-right') { x = pw - w - 20; y = ph - h - 20; }
+        else if (pos === 'top-left') { x = 20; y = ph - h - 20; }
+        else { x = (pw - w)/2; y = (ph - h)/2; }
+        p.drawImage(img, { x, y, width: w, height: h, opacity: op });
+      });
+      return { name: f.name.replace(/\.pdf$/i,'')+'_resimfiligran.pdf', bytes: await doc.save() };
+    }
+  },
+  sign: { icon:'✍️', label:'İmza', desc:'İmza at ve yapıştır', need:'one', targetType:'pdf',
+    opts:() => `<div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button type="button" id="openSign" class="btn accent small">✍️ İmza Çiz</button>
+        ${state.signaturePng ? '<button type="button" id="clearSign" class="btn ghost small">🗑 İmzayı Sil</button>' : ''}
+        ${state.signaturePng ? '<span style="color:var(--success);font-size:12px;align-self:center">✓ İmza kayıtlı</span>' : '<span style="color:var(--muted);font-size:12px;align-self:center">Henüz imza yok</span>'}
+      </div>
+      <label>Pozisyon<select id="opt-signpos"><option value="bottom-right" selected>Alt sağ</option><option value="bottom-left">Alt sol</option><option value="bottom-center">Alt orta</option></select></label>
+      <label>Genişlik (pt)<input type="number" id="opt-signw" value="150" min="50" max="400"/></label>`,
+    run: async () => {
+      if (!state.signaturePng) throw new Error('Önce imza çiz.');
+      const pos = $('#opt-signpos').value;
+      const w = parseFloat($('#opt-signw').value)||150;
+      const pngBytes = Uint8Array.from(atob(state.signaturePng.split(',')[1]), c => c.charCodeAt(0));
+      const f = state.files[0]; const doc = await loadPdf(f.bytes);
+      const img = await doc.embedPng(pngBytes);
+      const h = (w / img.width) * img.height;
+      doc.getPages().forEach(p => {
+        const { width: pw } = p.getSize();
+        let x;
+        if (pos === 'bottom-right') x = pw - w - 30;
+        else if (pos === 'bottom-left') x = 30;
+        else x = (pw - w)/2;
+        p.drawImage(img, { x, y: 30, width: w, height: h });
+      });
+      return { name: f.name.replace(/\.pdf$/i,'')+'_imzali.pdf', bytes: await doc.save() };
+    }
+  },
+
+  meta: { icon:'ℹ️', label:'Meta', desc:'Başlık, yazar, konu', need:'one', targetType:'pdf',
+    opts:() => `<label>Başlık<input type="text" id="opt-title"/></label><label>Yazar<input type="text" id="opt-author"/></label>
+      <label>Konu<input type="text" id="opt-subject"/></label><label>Anahtar kelimeler<input type="text" id="opt-keywords" placeholder="virgül,ile"/></label>`,
+    run: async () => {
+      const f = state.files[0]; const doc = await loadPdf(f.bytes);
+      const v = id => $(id).value;
+      if (v('#opt-title')) doc.setTitle(v('#opt-title'));
+      if (v('#opt-author')) doc.setAuthor(v('#opt-author'));
+      if (v('#opt-subject')) doc.setSubject(v('#opt-subject'));
+      if (v('#opt-keywords')) doc.setKeywords(v('#opt-keywords').split(',').map(s=>s.trim()).filter(Boolean));
+      doc.setModificationDate(new Date());
+      return { name: f.name.replace(/\.pdf$/i,'')+'_meta.pdf', bytes: await doc.save() };
+    }
+  },
+  cleanmeta: { icon:'🧹', label:'Meta Temizle', desc:'Tüm metadata sil', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<small>Başlık, yazar, konu, anahtar kelimeler, üretici, oluşturucu ve tarihler silinir.</small>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const doc = await loadPdf(f.bytes);
+      doc.setTitle('');
+      doc.setAuthor('');
+      doc.setSubject('');
+      doc.setKeywords([]);
+      doc.setProducer('');
+      doc.setCreator('');
+      return { name: f.name.replace(/\.pdf$/i,'')+'_temiz.pdf', bytes: await doc.save() };
+    }
+  },
+  report: { icon:'🔬', label:'PDF Raporu', desc:'Analiz + renk + boyut', need:'one', targetType:'pdf',
+    opts:() => `<small>Metadata, sayfa boyutları, yer imleri, renk paleti. .txt olarak indirilir.</small>`,
+    run: async () => {
+      const f = state.files[0];
+      const pdfDoc = await loadPdf(f.bytes);
+      const pdfJs = await pdfjsLib.getDocument({ data: f.bytes.slice() }).promise;
+      let outlines = '';
+      try {
+        const outline = await pdfJs.getOutline();
+        const walk = (items, depth = 0) => {
+          for (const it of items) {
+            outlines += `${'  '.repeat(depth)}• ${it.title || '(başlıksız)'}\n`;
+            if (it.items) walk(it.items, depth + 1);
+          }
+        };
+        if (outline?.length) walk(outline);
+      } catch {}
+      const sizes = new Set();
+      pdfDoc.getPages().forEach(p => {
+        const { width, height } = p.getSize();
+        sizes.add(`${Math.round(width)}×${Math.round(height)} pt`);
+      });
+      const colors = new Map();
+      const maxScan = Math.min(3, pdfJs.numPages);
+      for (let i = 1; i <= maxScan; i++) {
+        try {
+          setProgress((i/maxScan)*100); await tick();
+          const page = await pdfJs.getPage(i);
+          const { canvas } = await renderPageToCanvas(page, 0.3);
+          const ctx = canvas.getContext('2d');
+          const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const d = img.data;
+          for (let k = 0; k < d.length; k += 32) {
+            if (d[k+3] < 220) continue;
+            const r = Math.round(d[k]/32)*32, g = Math.round(d[k+1]/32)*32, b = Math.round(d[k+2]/32)*32;
+            const key = `${r},${g},${b}`;
+            colors.set(key, (colors.get(key) || 0) + 1);
+          }
+        } catch {}
+      }
+      const topColors = [...colors.entries()].sort((a,b) => b[1] - a[1]).slice(0, 6);
+      let report = `PDF RAPORU\n${'═'.repeat(50)}\nDosya: ${f.name}\n\n`;
+      report += `📄 GENEL\n${'─'.repeat(50)}\n`;
+      report += `  Sayfa sayısı : ${pdfDoc.getPageCount()}\n`;
+      report += `  Dosya boyutu : ${fmtSize(f.size)}\n`;
+      report += `  Sayfa boyutları: ${[...sizes].join(', ')}\n\n`;
+      report += `ℹ️  METADATA\n${'─'.repeat(50)}\n`;
+      report += `  Başlık     : ${pdfDoc.getTitle() || '(yok)'}\n`;
+      report += `  Yazar      : ${pdfDoc.getAuthor() || '(yok)'}\n`;
+      report += `  Konu       : ${pdfDoc.getSubject() || '(yok)'}\n`;
+      report += `  Üretici    : ${pdfDoc.getProducer() || '(yok)'}\n`;
+      report += `  Oluşturan  : ${pdfDoc.getCreator() || '(yok)'}\n\n`;
+      report += `📋 YER İMLERİ\n${'─'.repeat(50)}\n`;
+      report += outlines || '  (yer imi yok)\n';
+      report += `\n🎨 RENK PALETİ (ilk ${maxScan} sayfa)\n${'─'.repeat(50)}\n`;
+      if (topColors.length) {
+        topColors.forEach(([c, count]) => {
+          const [r,g,b] = c.split(',').map(Number);
+          const hex = '#' + [r,g,b].map(x => x.toString(16).padStart(2,'0')).join('').toUpperCase();
+          report += `  ${hex}  rgb(${r},${g},${b})  — ${count} örnek\n`;
+        });
+      } else report += '  (analiz edilemedi)\n';
+      report += `\n${'═'.repeat(50)}\nMCT YAZILIM · PDF Studio\n`;
+      return { name: f.name.replace(/\.pdf$/i,'')+'_rapor.txt', bytes: new TextEncoder().encode(report), mime:'text/plain' };
+    }
+  },
+  fontlist: { icon:'🔤', label:'Font Listele', desc:'Kullanılan fontları çıkar', need:'one', targetType:'pdf',
+    opts:() => `<small>PDF'te kullanılan tüm fontları listeler (.txt).</small>`,
+    run: async () => {
+      const f = state.files[0];
+      const pdf = await pdfjsLib.getDocument({ data: f.bytes.slice() }).promise;
+      const fonts = new Map();
+      for (let i = 1; i <= pdf.numPages; i++) {
+        setProgress((i/pdf.numPages)*100);
+        setStatus(`Sayfa ${i}/${pdf.numPages}…`, 'loading'); await tick();
+        const page = await pdf.getPage(i);
+        try {
+          const opList = await page.getOperatorList();
+          for (let k = 0; k < opList.fnArray.length; k++) {
+            if (opList.fnArray[k] === pdfjsLib.OPS.setFont) {
+              const fontName = opList.argsArray[k][0];
+              if (fontName) fonts.set(fontName, (fonts.get(fontName) || 0) + 1);
+            }
+          }
+        } catch {}
+      }
+      let out = `PDF FONT LİSTESİ\n${'═'.repeat(50)}\nDosya: ${f.name}\nSayfa: ${pdf.numPages}\n\n`;
+      if (!fonts.size) out += 'Font bulunamadı.\n';
+      else {
+        const sorted = [...fonts.entries()].sort((a,b) => b[1] - a[1]);
+        sorted.forEach(([name, count]) => { out += `  ${name}  (${count} kez)\n`; });
+      }
+      out += `\n${'═'.repeat(50)}\nToplam: ${fonts.size} benzersiz font\nMCT YAZILIM\n`;
+      return { name: f.name.replace(/\.pdf$/i,'')+'_fontlar.txt', bytes: new TextEncoder().encode(out), mime:'text/plain' };
+    }
+  },
+  sha256: { icon:'🔒', label:'SHA-256', desc:'Bütünlük kontrolü', need:'one', batchable:true,
+    opts:() => `<small>Dosyanın SHA-256 hash'ini hesaplar. Karşılaştırma için çıktıyı kopyalayabilirsin.</small>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const buf = f.bytes.buffer.slice(f.bytes.byteOffset, f.bytes.byteOffset + f.bytes.byteLength);
+      const hash = await crypto.subtle.digest('SHA-256', buf);
+      const hex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+      const out = `SHA-256 BÜTÜNLÜK KONTROLÜ\n${'═'.repeat(60)}\nDosya: ${f.name}\nBoyut: ${fmtSize(f.size)}\n\nSHA-256:\n${hex}\n\n${'═'.repeat(60)}\nMCT YAZILIM\n`;
+      return { name: f.name + '.sha256.txt', bytes: new TextEncoder().encode(out), mime:'text/plain' };
+    }
+  },
+  totext: { icon:'📝', label:'Metin Çıkar', desc:'PDF → .txt', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<small>Metni .txt olarak çıkarır.</small>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const pdf = await pdfjsLib.getDocument({ data: f.bytes.slice() }).promise;
+      let txt = '';
+      for (let i=1; i<=pdf.numPages; i++) {
+        setProgress((i/pdf.numPages)*100); await tick();
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        txt += `\n--- Sayfa ${i} ---\n` + content.items.map(it=>it.str).join(' ') + '\n';
+      }
+      return { name: f.name.replace(/\.pdf$/i,'')+'.txt', bytes: new TextEncoder().encode(txt), mime:'text/plain' };
+    }
+  },
+  ocr: { icon:'🔍', label:'OCR', desc:'Taranmış PDF\'ten metin', need:'one', targetType:'pdf',
+    opts:() => `<label>Dil<select id="opt-lang"><option value="tur" selected>Türkçe</option><option value="eng">İngilizce</option><option value="tur+eng">Türkçe + İngilizce</option></select></label>
+      <label>Sayfa aralığı<input type="text" id="opt-ranges" value="1-" placeholder="örn: 1-, 1-3,5"/></label>
+      <small>⚠️ İlk kullanımda ~10 MB dil modeli indirir.</small>`,
+    run: async () => {
+      setStatus('OCR motoru yükleniyor…', 'loading'); setProgress(3); await tick();
+      const Tesseract = await import('https://cdn.jsdelivr.net/npm/tesseract.js@5.1.0/dist/tesseract.esm.min.js');
+      setProgress(8);
+      const f = state.files[0];
+      const lang = $('#opt-lang').value;
+      const pdf = await pdfjsLib.getDocument({ data: f.bytes.slice() }).promise;
+      let ranges = parseRanges($('#opt-ranges').value, pdf.numPages);
+      if (!ranges.length) ranges = [[1, pdf.numPages]];
+      const pageIdxs = [];
+      ranges.forEach(([a,b]) => { for (let i=a;i<=b;i++) pageIdxs.push(i); });
+      const worker = await Tesseract.createWorker(lang, 1, {
+        logger: m => {
+          if (m.status === 'recognizing text') {
+            const p = (m.progress || 0) * 100;
+            setStatus(`OCR: %${p.toFixed(0)}`, 'loading');
+          }
+        }
+      });
+      let outText = '';
+      for (let k = 0; k < pageIdxs.length; k++) {
+        const pageNum = pageIdxs[k];
+        setProgress(10 + (k / pageIdxs.length) * 85);
+        setStatus(`Sayfa ${pageNum} OCR…`, 'loading'); await tick();
+        const page = await pdf.getPage(pageNum);
+        const { canvas } = await renderPageToCanvas(page, 2);
+        const dataUrl = canvas.toDataURL('image/png');
+        const { data: { text } } = await worker.recognize(dataUrl);
+        outText += `\n--- Sayfa ${pageNum} ---\n${text}\n`;
+      }
+      await worker.terminate();
+      return { name: f.name.replace(/\.pdf$/i,'')+'_ocr.txt', bytes: new TextEncoder().encode(outText), mime:'text/plain' };
+    }
+  },
+  search: { icon:'🔎', label:'Metin Ara', desc:'Kelime hangi sayfada', need:'one', targetType:'pdf',
+    opts:() => `<label>Aranacak kelime<input type="text" id="opt-query" placeholder="örn: fatura"/></label>
+      <label>Büyük/küçük harf<select id="opt-case"><option value="i" selected>Duyarsız</option><option value="">Duyarlı</option></select></label>`,
+    run: async () => {
+      const q = $('#opt-query').value.trim();
+      if (!q) throw new Error('Aranacak kelime girin.');
+      const flags = $('#opt-case').value;
+      const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(escaped, 'g' + flags);
+      const f = state.files[0];
+      const pdf = await pdfjsLib.getDocument({ data: f.bytes.slice() }).promise;
+      let out = `METİN ARAMA\n${'═'.repeat(50)}\nDosya: ${f.name}\nKelime: "${q}"\n\n`;
+      let total = 0;
+      for (let i = 1; i <= pdf.numPages; i++) {
+        setProgress((i/pdf.numPages)*100); await tick();
+        const page = await pdf.getPage(i);
+        const c = await page.getTextContent();
+        const txt = c.items.map(it => it.str).join(' ').replace(/\s+/g, ' ');
+        const matches = txt.match(regex);
+        if (matches) { total += matches.length; out += `\nSayfa ${i}: ${matches.length} eşleşme\n`; }
+      }
+      out += `\n${'═'.repeat(50)}\nTOPLAM: ${total} eşleşme\n`;
+      return { name: f.name.replace(/\.pdf$/i,'')+'_arama.txt', bytes: new TextEncoder().encode(out), mime:'text/plain' };
+    }
+  },
+  diff: { icon:'📊', label:'Metin Diff', desc:'İki PDF metin farkı', need:'multi', targetType:'pdf',
+    opts:() => `<small>İlk iki PDF'in metnini satır bazlı karşılaştırır.</small>
+      <button type="button" id="openVisualDiff" class="btn ghost small">🔍 Görsel Karşılaştır</button>`,
+    run: async () => {
+      const pdfs = filesFor(TOOLS.diff);
+      if (pdfs.length < 2) throw new Error('En az 2 PDF gerekli.');
+      const [f1, f2] = pdfs;
+      const extract = async (bytes) => {
+        const pdf = await pdfjsLib.getDocument({ data: bytes.slice() }).promise;
+        const lines = [];
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const p = await pdf.getPage(i);
+          const c = await p.getTextContent();
+          const txt = c.items.map(it => it.str).join(' ');
+          lines.push(`--- Sayfa ${i} ---`);
+          lines.push(...txt.split(/(?<=[.!?])\s+/).map(s => s.trim()).filter(Boolean));
+        }
+        return lines;
+      };
+      setStatus('Metinler çıkarılıyor…', 'loading'); setProgress(20); await tick();
+      const lines1 = await extract(f1.bytes);
+      setProgress(60); await tick();
+      const lines2 = await extract(f2.bytes);
+      setProgress(90); await tick();
+      const m = lines1.length, n = lines2.length;
+      const dp = Array.from({length:m+1}, () => new Uint16Array(n+1));
+      for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+          dp[i][j] = lines1[i-1] === lines2[j-1] ? dp[i-1][j-1]+1 : Math.max(dp[i-1][j], dp[i][j-1]);
+        }
+      }
+      let i = m, j = n;
+      const ops = [];
+      while (i > 0 || j > 0) {
+        if (i > 0 && j > 0 && lines1[i-1] === lines2[j-1]) { ops.unshift({type:'same', text:lines1[i-1]}); i--; j--; }
+        else if (j > 0 && (i === 0 || dp[i][j-1] >= dp[i-1][j])) { ops.unshift({type:'add', text:lines2[j-1]}); j--; }
+        else { ops.unshift({type:'del', text:lines1[i-1]}); i--; }
+      }
+      const adds = ops.filter(o=>o.type==='add').length;
+      const dels = ops.filter(o=>o.type==='del').length;
+      let out = `PDF KARŞILAŞTIRMA\n1: ${f1.name}\n2: ${f2.name}\n+${adds} eklenen, −${dels} silinen\n${'='.repeat(60)}\n\n`;
+      ops.forEach(o => {
+        const p = o.type === 'add' ? '+ ' : o.type === 'del' ? '− ' : '  ';
+        out += p + o.text + '\n';
+      });
+      return { name: 'karsilastirma.txt', bytes: new TextEncoder().encode(out), mime:'text/plain' };
+    }
+  },
+
+  encrypt: { icon:'🔐', label:'Şifrele', desc:'PDF\'yi kilitle', need:'one', targetType:'pdf', batchable:true,
+    opts:() => {
+      const pws = getPasswords();
+      return `<label>Kullanıcı şifresi<input type="password" id="userPw"/></label>
+        ${pws.length ? `<label>Kayıtlı şifre<select id="pwPick"><option value="">— Seç —</option>${pws.map((p,i) => `<option value="${i}">${p.name}</option>`).join('')}</select></label>` : ''}
+        <label class="checkbox-row"><input type="checkbox" id="savePw"/> Şifreyi kasaya kaydet</label>`;
+    },
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const userPw = $('#userPw').value;
+      if (!userPw) throw new Error('Şifre girin.');
+      if ($('#savePw')?.checked) addPassword(f.name, userPw);
+      const doc = await loadPdf(f.bytes);
+      const bytes = await doc.save({
+        userPassword: userPw, ownerPassword: userPw,
+        permissions: { printing:'highResolution', modifying:false, copying:false, annotating:false, fillingForms:false, contentAccessibility:true, documentAssembly:false }
+      });
+      return { name: f.name.replace(/\.pdf$/i,'')+'_sifreli.pdf', bytes };
+    }
+  },
+  decrypt: { icon:'🔓', label:'Şifre Çöz', desc:'Şifreyi kaldır', need:'one', targetType:'pdf',
+    opts:() => {
+      const f = filesFor(TOOLS.decrypt)[0];
+      const pws = getPasswords();
+      const warn = f && !f.encrypted
+        ? `<small style="color:var(--warning)">⚠ PDF şifreli görünmüyor. Yine de dene.</small>` : '';
+      return `${warn}<label>Mevcut şifre<input type="password" id="pw" placeholder="PDF şifresi"/></label>
+        ${pws.length ? `<label>Kayıtlı şifre<select id="pwPick"><option value="">— Seç —</option>${pws.map((p,i) => `<option value="${i}">${p.name}</option>`).join('')}</select></label>` : ''}`;
+    },
+    run: async () => {
+      const f = filesFor(TOOLS.decrypt)[0];
+      if (!f) throw new Error('PDF gerekli.');
+      const pw = $('#pw').value;
+      if (!pw) throw new Error('Şifre girin.');
+      let doc;
+      try { doc = await PDFDocument.load(f.bytes, { password: pw }); }
+      catch { throw new Error('Şifre yanlış veya PDF bozuk.'); }
+      return { name: f.name.replace(/\.pdf$/i,'')+'_cozulmus.pdf', bytes: await doc.save() };
+    }
+  },
+
+  tojpg: { icon:'🖼️', label:'PDF → JPG', desc:'Sayfaları resme çevir', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>Kalite<select id="opt-q"><option value="0.7">Orta</option><option value="0.9" selected>Yüksek</option><option value="1">Maksimum</option></select></label>
+      <label>Ölçek<input type="number" id="opt-scale" value="2" min="1" max="4" step="0.5"/></label>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const q = parseFloat($('#opt-q').value), scale = parseFloat($('#opt-scale').value);
+      const pdf = await pdfjsLib.getDocument({ data: f.bytes.slice() }).promise;
+      const base = f.name.replace(/\.pdf$/i,'');
+      if (pdf.numPages === 1) {
+        const page = await pdf.getPage(1);
+        const { canvas } = await renderPageToCanvas(page, scale);
+        const blob = await new Promise(r => canvas.toBlob(r,'image/jpeg',q));
+        return { name: base+'.jpg', bytes: new Uint8Array(await blob.arrayBuffer()), mime:'image/jpeg' };
+      }
+      const zip = new JSZip();
+      for (let i=1; i<=pdf.numPages; i++) {
+        setProgress((i/pdf.numPages)*100); await tick();
+        const page = await pdf.getPage(i);
+        const { canvas } = await renderPageToCanvas(page, scale);
+        const blob = await new Promise(r => canvas.toBlob(r,'image/jpeg',q));
+        zip.file(`${base}_${String(i).padStart(3,'0')}.jpg`, await blob.arrayBuffer());
+      }
+      return { name: base+'_jpgler.zip', bytes: await zip.generateAsync({type:'uint8array'}), zip: true };
+    }
+  },
+  topng: { icon:'🖼️', label:'PDF → PNG', desc:'Sayfaları PNG yap', need:'one', targetType:'pdf', batchable:true,
+    opts:() => `<label>Ölçek<input type="number" id="opt-scale" value="2" min="1" max="4" step="0.5"/></label>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0]; const scale = parseFloat($('#opt-scale').value);
+      const pdf = await pdfjsLib.getDocument({ data: f.bytes.slice() }).promise;
+      const base = f.name.replace(/\.pdf$/i,'');
+      if (pdf.numPages === 1) {
+        const page = await pdf.getPage(1);
+        const { canvas } = await renderPageToCanvas(page, scale);
+        const blob = await new Promise(r => canvas.toBlob(r,'image/png'));
+        return { name: base+'.png', bytes: new Uint8Array(await blob.arrayBuffer()), mime:'image/png' };
+      }
+      const zip = new JSZip();
+      for (let i=1; i<=pdf.numPages; i++) {
+        setProgress((i/pdf.numPages)*100); await tick();
+        const page = await pdf.getPage(i);
+        const { canvas } = await renderPageToCanvas(page, scale);
+        const blob = await new Promise(r => canvas.toBlob(r,'image/png'));
+        zip.file(`${base}_${String(i).padStart(3,'0')}.png`, await blob.arrayBuffer());
+      }
+      return { name: base+'_pngler.zip', bytes: await zip.generateAsync({type:'uint8array'}), zip: true };
+    }
+  },
+
+  images: { icon:'📸', label:'Resim → PDF', desc:'Görsellerden PDF yap', need:'none', targetType:'image',
+    opts:() => `<label>Görseller<input type="file" id="imgInput" accept="image/png,image/jpeg,image/webp" multiple></label>
+      <label>Sayfa boyutu<select id="opt-size"><option value="auto" selected>Otomatik</option><option value="a4">A4</option><option value="letter">Letter</option></select></label>
+      <small>Seçmezsen listedeki görseller kullanılır.</small>`,
+    run: async () => {
+      const input = document.getElementById('imgInput');
+      const files = [];
+      if (input?.files.length) {
+        for (const file of input.files) {
+          files.push({ bytes: new Uint8Array(await file.arrayBuffer()), mime: file.type, name: file.name });
+        }
+      } else {
+        const imgs = state.files.filter(f => f.type === 'image');
+        if (!imgs.length) throw new Error('Görsel seçin veya listede görsel olsun.');
+        imgs.forEach(f => files.push({ bytes: f.bytes, mime: f.mime, name: f.name }));
+      }
+      const size = $('#opt-size').value;
+      const out = await PDFDocument.create();
+      for (let i=0; i<files.length; i++) {
+        setProgress((i/files.length)*100); await tick();
+        const { bytes, mime, name } = files[i];
+        let img;
+        try { img = await out.embedJpg(bytes); }
+        catch {
+          try { img = await out.embedPng(bytes); }
+          catch {
+            try {
+              const el = await loadImageEl(bytes, mime);
+              const c = drawToCanvas(el, el.width, el.height, '#fff');
+              const b = await canvasToBlobAsync(c, 'image/png');
+              img = await out.embedPng(new Uint8Array(await b.arrayBuffer()));
+            } catch { throw new Error(`${name}: desteklenmiyor.`); }
+          }
+        }
+        if (size === 'auto') {
+          const p = out.addPage([img.width, img.height]);
+          p.drawImage(img, { x:0, y:0, width:img.width, height:img.height });
+        } else {
+          const dim = size==='a4' ? PageSizes.A4 : PageSizes.Letter;
+          const p = out.addPage(dim);
+          const s = Math.min(dim[0]/img.width, dim[1]/img.height)*0.92;
+          const w = img.width*s, h = img.height*s;
+          p.drawImage(img, { x:(dim[0]-w)/2, y:(dim[1]-h)/2, width:w, height:h });
+        }
+      }
+      return { name: 'gorseller.pdf', bytes: await out.save() };
+    }
+  },
+  textpdf: { icon:'✍️', label:'Metin → PDF', desc:'Yazıdan PDF oluştur', need:'none',
+    opts:() => `<label>Metin<textarea id="textInput" rows="6">Merhaba Dünya!</textarea></label>
+      <label>Yazı boyutu<input type="number" id="textSize" value="12" min="8" max="72"/></label>
+      <label>Sayfa boyutu<select id="opt-size"><option value="a4" selected>A4</option><option value="letter">Letter</option></select></label>`,
+    run: async () => {
+      const text = $('#textInput').value || '';
+      const size = parseInt($('#textSize').value,10)||12;
+      const pageDim = $('#opt-size').value==='letter' ? PageSizes.Letter : PageSizes.A4;
+      const out = await PDFDocument.create();
+      const font = await out.embedFont(StandardFonts.Helvetica);
+      const margin = 50, lineH = size*1.4, maxW = pageDim[0]-margin*2;
+      const words = text.split(/\s+/); const lines = []; let cur = '';
+      for (const w of words) {
+        const test = cur ? cur+' '+w : w;
+        if (font.widthOfTextAtSize(test, size) > maxW && cur) { lines.push(cur); cur = w; }
+        else cur = test;
+      }
+      if (cur) lines.push(cur);
+      let page = out.addPage(pageDim); let y = pageDim[1]-margin;
+      for (const line of lines) {
+        if (y < margin) { page = out.addPage(pageDim); y = pageDim[1]-margin; }
+        page.drawText(line, { x: margin, y, size, font, color: rgb(0.1,0.1,0.1) });
+        y -= lineH;
+      }
+      return { name: 'metin.pdf', bytes: await out.save() };
+    }
+  },
+
+  pngToJpg: { icon:'🖼️', label:'PNG → JPG', desc:'JPEG\'e çevir', need:'one', targetType:'image', batchable:true,
+    opts:() => `<label>Kalite<select id="opt-q"><option value="0.95">Yüksek</option><option value="0.8" selected>Orta</option><option value="0.6">Düşük</option></select></label>
+      <label>Arka plan<select id="opt-bg"><option value="#ffffff" selected>Beyaz</option><option value="#000000">Siyah</option></select></label>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const q = parseFloat($('#opt-q').value);
+      const bg = $('#opt-bg').value;
+      const img = await loadImageEl(f.bytes, f.mime);
+      const canvas = drawToCanvas(img, img.width, img.height, bg);
+      const blob = await canvasToBlobAsync(canvas, 'image/jpeg', q);
+      return { name: f.name.replace(/\.[^.]+$/, '')+'.jpg', bytes: new Uint8Array(await blob.arrayBuffer()), mime:'image/jpeg', originalSize: f.size };
+    }
+  },
+  pngToWebp: { icon:'🖼️', label:'PNG → WebP', desc:'Modern format', need:'one', targetType:'image', batchable:true,
+    opts:() => `<label>Kalite<select id="opt-q"><option value="0.95">Yüksek</option><option value="0.85" selected>Orta</option><option value="0.65">Düşük</option></select></label>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const q = parseFloat($('#opt-q').value);
+      const img = await loadImageEl(f.bytes, f.mime);
+      const canvas = drawToCanvas(img, img.width, img.height, null);
+      const blob = await canvasToBlobAsync(canvas, 'image/webp', q);
+      if (!blob) throw new Error('WebP desteklenmiyor.');
+      return { name: f.name.replace(/\.[^.]+$/, '')+'.webp', bytes: new Uint8Array(await blob.arrayBuffer()), mime:'image/webp', originalSize: f.size };
+    }
+  },
+  pngToIco: { icon:'🎨', label:'PNG → ICO', desc:'Favicon üret', need:'one', targetType:'image',
+    opts:() => `<label>Boyutlar</label>
+      <div class="checkbox-row" style="flex-wrap:wrap;gap:8px">
+        <label class="checkbox-row"><input type="checkbox" class="ico-size" value="16" checked> 16</label>
+        <label class="checkbox-row"><input type="checkbox" class="ico-size" value="32" checked> 32</label>
+        <label class="checkbox-row"><input type="checkbox" class="ico-size" value="48" checked> 48</label>
+        <label class="checkbox-row"><input type="checkbox" class="ico-size" value="64"> 64</label>
+        <label class="checkbox-row"><input type="checkbox" class="ico-size" value="128"> 128</label>
+        <label class="checkbox-row"><input type="checkbox" class="ico-size" value="256"> 256</label>
+      </div>
+      <small>Favicon için 16+32+48 önerilir.</small>`,
+    run: async () => {
+      const f = state.files[0];
+      const panel = $('#spBody');
+      const sizes = [...panel.querySelectorAll('.ico-size:checked')].map(c => parseInt(c.value, 10)).sort((a,b) => a-b);
+      if (!sizes.length) throw new Error('En az bir boyut seçin.');
+      const img = await loadImageEl(f.bytes, f.mime);
+      const pngs = [];
+      for (const size of sizes) {
+        const canvas = drawToCanvas(img, size, size, null);
+        const blob = await canvasToBlobAsync(canvas, 'image/png');
+        pngs.push({ size, bytes: new Uint8Array(await blob.arrayBuffer()) });
+      }
+      return { name: f.name.replace(/\.[^.]+$/, '')+'.ico', bytes: buildIco(pngs), mime:'image/x-icon' };
+    }
+  },
+
+  imgCompress: { icon:'🗜️', label:'Görsel Sıkıştır', desc:'Boyutu küçült', need:'one', targetType:'image', batchable:true,
+    opts:() => `<label>Format<select id="opt-fmt"><option value="jpeg">JPEG (küçük)</option><option value="webp" selected>WebP (en küçük)</option><option value="png">PNG (kalite)</option></select></label>
+      <label>Kalite<select id="opt-q"><option value="0.95">Yüksek</option><option value="0.75" selected>Orta</option><option value="0.5">Düşük</option></select></label>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const fmt = $('#opt-fmt').value;
+      const q = parseFloat($('#opt-q').value);
+      const img = await loadImageEl(f.bytes, f.mime);
+      const canvas = drawToCanvas(img, img.width, img.height, fmt === 'jpeg' ? '#fff' : null);
+      const mime = `image/${fmt}`;
+      const blob = await canvasToBlobAsync(canvas, mime, fmt === 'png' ? undefined : q);
+      if (!blob) throw new Error('Format desteklenmiyor.');
+      const ext = fmt === 'jpeg' ? 'jpg' : fmt;
+      return { name: f.name.replace(/\.[^.]+$/, '')+'_sik.'+ext, bytes: new Uint8Array(await blob.arrayBuffer()), mime, originalSize: f.size };
+    }
+  },
+  imgResize: { icon:'📐', label:'Boyutlandır', desc:'Genişlik/yükseklik', need:'one', targetType:'image', batchable:true,
+    opts:() => `<label>Maks genişlik (px)<input type="number" id="opt-w" value="1200" min="10" step="10"/></label>
+      <label>Maks yükseklik (px)<input type="number" id="opt-h" value="1200" min="10" step="10"/></label>
+      <label>Format<select id="opt-fmt"><option value="png" selected>PNG</option><option value="jpeg">JPEG</option><option value="webp">WebP</option></select></label>
+      <small>Oranı korur, sadece küçültür (büyütmez).</small>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const maxW = parseInt($('#opt-w').value, 10) || 1200;
+      const maxH = parseInt($('#opt-h').value, 10) || 1200;
+      const fmt = $('#opt-fmt').value;
+      const img = await loadImageEl(f.bytes, f.mime);
+      const s = Math.min(maxW/img.width, maxH/img.height, 1);
+      const nw = Math.round(img.width * s), nh = Math.round(img.height * s);
+      const canvas = drawToCanvas(img, nw, nh, fmt === 'jpeg' ? '#fff' : null);
+      const mime = `image/${fmt}`;
+      const blob = await canvasToBlobAsync(canvas, mime, 0.92);
+      const ext = fmt === 'jpeg' ? 'jpg' : fmt;
+      return { name: f.name.replace(/\.[^.]+$/, '')+`_${nw}x${nh}.${ext}`, bytes: new Uint8Array(await blob.arrayBuffer()), mime, originalSize: f.size };
+    }
+  },
+  imgGrayscale: { icon:'⚫', label:'Görsel Gri', desc:'Siyah-beyaz', need:'one', targetType:'image', batchable:true,
+    opts:() => `<label>Format<select id="opt-fmt"><option value="png" selected>PNG</option><option value="jpeg">JPEG</option></select></label>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const fmt = $('#opt-fmt').value;
+      const img = await loadImageEl(f.bytes, f.mime);
+      const canvas = drawToCanvas(img, img.width, img.height, null);
+      const ctx = canvas.getContext('2d');
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const d = imgData.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const g = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+        d[i] = d[i+1] = d[i+2] = g;
+      }
+      ctx.putImageData(imgData, 0, 0);
+      const mime = `image/${fmt}`;
+      const blob = await canvasToBlobAsync(canvas, mime, 0.92);
+      const ext = fmt === 'jpeg' ? 'jpg' : fmt;
+      return { name: f.name.replace(/\.[^.]+$/, '')+'_gri.'+ext, bytes: new Uint8Array(await blob.arrayBuffer()), mime, originalSize: f.size };
+    }
+  },
+  imgFlatten: { icon:'⬜', label:'Şeffaflık Kaldır', desc:'Arka plan ekle', need:'one', targetType:'image', batchable:true,
+    opts:() => `<label>Arka plan rengi<input type="text" id="opt-bg" value="#ffffff" placeholder="#ffffff"/></label>
+      <label>Format<select id="opt-fmt"><option value="jpeg" selected>JPEG</option><option value="png">PNG</option></select></label>`,
+    run: async (fileObj) => {
+      const f = fileObj || state.files[0];
+      const bg = $('#opt-bg').value || '#ffffff';
+      const fmt = $('#opt-fmt').value;
+      const img = await loadImageEl(f.bytes, f.mime);
+      const canvas = drawToCanvas(img, img.width, img.height, bg);
+      const mime = `image/${fmt}`;
+      const blob = await canvasToBlobAsync(canvas, mime, fmt === 'png' ? undefined : 0.92);
+      const ext = fmt === 'jpeg' ? 'jpg' : fmt;
+      return { name: f.name.replace(/\.[^.]+$/, '')+'_bg.'+ext, bytes: new Uint8Array(await blob.arrayBuffer()), mime, originalSize: f.size };
+    }
+  },
+};
+
+/* ===== TOOL GRID ===== */
+function renderToolGrid() {
+  if (!state.files.length) {
+    $('#toolsSection').classList.add('hidden');
+    return;
+  }
+  $('#toolsSection').classList.remove('hidden');
+
+  const q = state.searchQuery.toLowerCase().trim();
+  const matches = (t) => !q || t.label.toLowerCase().includes(q) || (t.desc||'').toLowerCase().includes(q);
+  const hasPdf = state.files.some(f => f.type === 'pdf');
+  const hasImg = state.files.some(f => f.type === 'image');
+
+  const pdfGroups = {}, visualGroups = {};
+  const favIds = new Set(getFavs());
+  const favTools = [];
+
+  Object.entries(TOOLS).forEach(([k, t]) => {
+    if (!matches(t)) return;
+    const meta = TOOL_META[k];
+    if (!meta) return;
+    const toolObj = { k, ...t };
+    if (favIds.has(k)) favTools.push({ ...toolObj, panel: meta.panel });
+    const target = meta.panel === 'pdf' ? pdfGroups : visualGroups;
+    (target[meta.group] = target[meta.group] || []).push(toolObj);
+  });
+
+  const isAvail = (t) => {
+    if (t.targetType === 'pdf') return hasPdf || t.need === 'none';
+    if (t.targetType === 'image') return hasImg || t.need === 'none';
+    return true;
+  };
+
+  const btnHTML = (t) => {
+    const avail = isAvail(t);
+    const fav = favIds.has(t.k);
+    return `<button class="tool-btn ${state.tool===t.k?'active':''} ${avail?'':'disabled'}" data-tool="${t.k}" ${state.busy?'disabled':''}>
+      <span class="tb-icon">${t.icon}</span>
+      <span class="tb-label">${t.label}</span>
+      <span class="tc-fav ${fav?'active':''}" data-fav="${t.k}" role="button" title="${fav?'Favoriden çıkar':'Favorilere ekle'}">${STAR_SVG}</span>
+    </button>`;
+  };
+
+  const groupHTML = (name, tools) => `
+    <div class="tool-group">
+      <h4 class="tool-group-title">${name}</h4>
+      <div class="tool-group-grid">${tools.map(btnHTML).join('')}</div>
+    </div>`;
+
+  let pdfHTML = '', visualHTML = '';
+
+  /* PATCH 6: Favoriler panel bazında ayrılır */
+  if (favTools.length) {
+    const fPdf = favTools.filter(t => t.panel === 'pdf');
+    const fVis = favTools.filter(t => t.panel === 'visual');
+    if (fPdf.length) pdfHTML += groupHTML('⭐ Favoriler', fPdf);
+    if (fVis.length) visualHTML += groupHTML('⭐ Favoriler', fVis);
+  }
+
+  pdfHTML += Object.entries(pdfGroups).map(([n, ts]) => groupHTML(n, ts)).join('') || '<div class="empty-state">Sonuç yok</div>';
+  visualHTML += Object.entries(visualGroups).map(([n, ts]) => groupHTML(n, ts)).join('') || '<div class="empty-state">Sonuç yok</div>';
+
+  $('#pdfTools').innerHTML = pdfHTML;
+  $('#visualTools').innerHTML = visualHTML;
+
+  document.querySelectorAll('.tool-btn:not(.disabled)').forEach(btn => {
+    if (state.busy) return;
+    btn.onclick = (e) => {
+      if (e.target.closest('.tc-fav')) return;
+      selectTool(btn.dataset.tool);
+    };
+  });
+  document.querySelectorAll('.tc-fav').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation(); e.preventDefault();
+      toggleFav(btn.dataset.fav);
+    };
+  });
+}
+
+/* PATCH 5: aynı araca tıklayınca form sıfırlanmaz */
+function selectTool(k) {
+  if (state.busy) return;
+  if (state.tool !== k) {
+    state.tool = k;
+    state.result = null;
+    $('#resultSec').classList.add('hidden');
+    $('#settingsPanel').dataset.currentTool = '';
+    $('#status').className = 'status';
+  }
+  renderToolGrid();
+  renderToolPanel();
+  setTimeout(() => $('#settingsPanel').scrollIntoView({ behavior:'smooth', block:'start' }), 100);
+}
+
+function renderToolPanel() {
+  const panel = $('#settingsPanel'), t = TOOLS[state.tool], runBtn = $('#runBtn'), batchBtn = $('#batchBtn');
+  if (!t) { panel.classList.add('hidden'); panel.dataset.currentTool = ''; return; }
+  const pool = filesFor(t);
+  const needCount = t.need === 'multi' ? 2 : t.need === 'one' ? 1 : 0;
+  const hasEnough = t.need === 'none' ? true : pool.length >= needCount;
+  if (t.need !== 'none' && !pool.length) { panel.classList.add('hidden'); panel.dataset.currentTool = ''; return; }
+  panel.classList.remove('hidden');
+  $('#spIcon').textContent = t.icon;
+  $('#spTitle').textContent = t.label;
+  $('#spDesc').textContent = t.desc;
+  if (panel.dataset.currentTool !== state.tool) {
+    $('#spBody').innerHTML = t.opts();
+    panel.dataset.currentTool = state.tool;
+  }
+  if (t.hideRun) runBtn.classList.add('hidden');
+  else { runBtn.classList.remove('hidden'); runBtn.disabled = !hasEnough || state.busy; }
+  if (t.batchable && pool.length > 1) batchBtn.classList.remove('hidden');
+  else batchBtn.classList.add('hidden');
+  /* PATCH 4: success/error status korunur */
+  const stEl = $('#status');
+  const keep = stEl.classList.contains('success') || stEl.classList.contains('error');
+  if (!keep) setStatus(hasEnough ? '' : (t.need === 'multi' ? 'En az 2 dosya gerekli.' : `1 ${t.targetType||'pdf'} gerekli.`));
+
+  if (state.tool==='reorder') { const b = $('#openReorder'); if (b) b.onclick = openReorderEditor; }
+  if (state.tool==='sign') {
+    const b = $('#openSign'); if (b) b.onclick = openSignPad;
+    const c = $('#clearSign'); if (c) c.onclick = () => {
+      state.signaturePng = null;
+      try { localStorage.removeItem(SIG_KEY); } catch {}
+      $('#settingsPanel').dataset.currentTool = '';
+      renderToolPanel();
+      toast('İmza silindi', 'info');
+    };
+  }
+  if (state.tool==='diff') { const b = $('#openVisualDiff'); if (b) b.onclick = openVisualDiff; }
+  if (state.tool==='encrypt' || state.tool==='decrypt') {
+    const pick = $('#pwPick');
+    if (pick) pick.onchange = () => {
+      const pws = getPasswords();
+      const p = pws[+pick.value];
+      if (p) {
+        const inp = state.tool==='encrypt' ? $('#userPw') : $('#pw');
+        if (inp) inp.value = p.pw;
+        if (state.tool==='encrypt') { const cb = $('#savePw'); if (cb) cb.checked = false; }
+      }
+    };
+  }
+}
+
+async function rebuildAsImages(bytes, dpi, quality, filter, forcedSize) {
+  const pdf = await pdfjsLib.getDocument({ data: bytes.slice() }).promise;
+  const out = await PDFDocument.create();
+  const scale = dpi/72;
+  for (let i=1; i<=pdf.numPages; i++) {
+    setProgress((i/pdf.numPages)*100);
+    setStatus(`Sayfa ${i}/${pdf.numPages}…`, 'loading'); await tick();
+    const page = await pdf.getPage(i);
+    const { canvas } = await renderPageToCanvas(page, scale);
+    if (filter) {
+      const ctx = canvas.getContext('2d');
+      const imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
+      const d = imgData.data;
+      for (let k=0; k<d.length; k+=4) {
+        let r = d[k], g = d[k+1], b = d[k+2];
+        if (filter === 'gray') { const gr = 0.299*r+0.587*g+0.114*b; r = g = b = gr; }
+        else if (filter === 'night') { const gr = 0.299*r+0.587*g+0.114*b; const inv = 255 - gr; r = g = b = inv; }
+        else if (filter === 'sepia') {
+          const tr = 0.393*r+0.769*g+0.189*b; const tg = 0.349*r+0.686*g+0.168*b; const tb = 0.272*r+0.534*g+0.131*b;
+          r = Math.min(255, tr); g = Math.min(255, tg); b = Math.min(255, tb);
+        }
+        d[k] = r; d[k+1] = g; d[k+2] = b;
+      }
+      ctx.putImageData(imgData, 0, 0);
+    }
+    const blob = await new Promise(r => canvas.toBlob(r,'image/jpeg',quality));
+    const jpg = await out.embedJpg(new Uint8Array(await blob.arrayBuffer()));
+    let pw, ph;
+    if (forcedSize) { pw = forcedSize[0]; ph = forcedSize[1]; }
+    else { const vp = page.getViewport({scale:1}); pw = vp.width; ph = vp.height; }
+    const newPage = out.addPage([pw, ph]);
+    if (forcedSize) {
+      const s = Math.min(pw/jpg.width, ph/jpg.height)*0.96;
+      const w = jpg.width*s, h = jpg.height*s;
+      newPage.drawImage(jpg, { x:(pw-w)/2, y:(ph-h)/2, width:w, height:h });
+    } else {
+      newPage.drawImage(jpg, { x:0, y:0, width:pw, height:ph });
+    }
+  }
+  return await out.save({ useObjectStreams: true });
+}
+
+/* ===== REORDER ===== */
+let reorderOrder = [], reorderCanvases = [];
+async function openReorderEditor() {
+  const f = filesFor(TOOLS.reorder)[0]; if (!f) return;
+  const modal = $('#reorderModal'), grid = $('#reorderGrid');
+  grid.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);grid-column:1/-1">Yükleniyor…</div>';
+  modal.classList.remove('hidden');
+  const pdf = await pdfjsLib.getDocument({ data: f.bytes.slice() }).promise;
+  reorderOrder = Array.from({length: pdf.numPages}, (_,i)=>i);
+  reorderCanvases = [];
+  for (let i=0; i<pdf.numPages; i++) {
+    const page = await pdf.getPage(i+1);
+    const { canvas } = await renderPageToCanvas(page, 0.35);
+    reorderCanvases.push(canvas);
+    if (i%10===0) { grid.innerHTML = `<div style="padding:10px;color:var(--muted);grid-column:1/-1">${i+1}/${pdf.numPages}…</div>`; await tick(); }
+  }
+  renderReorderThumbs();
+}
+function renderReorderThumbs() {
+  const grid = $('#reorderGrid'); grid.innerHTML = '';
+  for (let pos=0; pos<reorderOrder.length; pos++) {
+    const orig = reorderOrder[pos];
+    const canvas = reorderCanvases[orig];
+    const div = document.createElement('div');
+    div.className = 'thumb';
+    div.innerHTML = `<div class="thumb-num">${pos+1} <span style="color:var(--muted)">(s.${orig+1})</span></div>`;
+    if (canvas) {
+      const c2 = document.createElement('canvas');
+      c2.width = canvas.width; c2.height = canvas.height;
+      c2.getContext('2d').drawImage(canvas,0,0);
+      div.appendChild(c2);
+    }
+    const btns = document.createElement('div');
+    btns.className = 'thumb-btns';
+    btns.innerHTML = `<button data-act="first">⏮</button><button data-act="left">←</button><button data-act="right">→</button>`;
+    btns.onclick = e => {
+      const act = e.target.dataset.act; if (!act) return;
+      const p = pos;
+      if (act==='left' && p>0) [reorderOrder[p-1],reorderOrder[p]] = [reorderOrder[p],reorderOrder[p-1]];
+      if (act==='right' && p<reorderOrder.length-1) [reorderOrder[p+1],reorderOrder[p]] = [reorderOrder[p],reorderOrder[p+1]];
+      if (act==='first' && p>0) { const [x] = reorderOrder.splice(p,1); reorderOrder.unshift(x); }
+      renderReorderThumbs();
+    };
+    div.appendChild(btns);
+    grid.appendChild(div);
+  }
+}
+async function applyReorder() {
+  const f = filesFor(TOOLS.reorder)[0]; if (!f) return;
+  const src = await loadPdf(f.bytes);
+  const out = await PDFDocument.create();
+  const pages = await out.copyPages(src, reorderOrder);
+  pages.forEach(p => out.addPage(p));
+  state.result = { name: f.name.replace(/\.pdf$/i,'')+'_sirali.pdf', bytes: await out.save() };
+  addHistory({ tool: 'reorder', output: state.result.name });
+  renderResult(state.result);
+  $('#reorderModal').classList.add('hidden');
+  toast('Hazır', 'success');
+}
+
+/* ===== SIGNATURE ===== */
+let sigDrawing = false, sigCtx = null, sigLastX = 0, sigLastY = 0;
+function openSignPad() {
+  $('#signModal').classList.remove('hidden');
+  const canvas = $('#sigCanvas');
+  canvas.width = 600; canvas.height = 240;
+  sigCtx = canvas.getContext('2d');
+  sigCtx.fillStyle = '#fff'; sigCtx.fillRect(0,0,canvas.width,canvas.height);
+  sigCtx.strokeStyle = '#000'; sigCtx.lineWidth = 3;
+  sigCtx.lineCap = 'round'; sigCtx.lineJoin = 'round';
+  const getPos = (e) => {
+    const r = canvas.getBoundingClientRect();
+    const t = e.touches?.[0] || e;
+    return { x: (t.clientX - r.left) * (canvas.width / r.width), y: (t.clientY - r.top) * (canvas.height / r.height) };
+  };
+  const start = (e) => { e.preventDefault(); sigDrawing = true; const p = getPos(e); sigLastX = p.x; sigLastY = p.y; };
+  const move = (e) => {
+    if (!sigDrawing) return;
+    e.preventDefault();
+    const p = getPos(e);
+    sigCtx.beginPath(); sigCtx.moveTo(sigLastX, sigLastY); sigCtx.lineTo(p.x, p.y); sigCtx.stroke();
+    sigLastX = p.x; sigLastY = p.y;
+  };
+  const end = () => { sigDrawing = false; };
+  canvas.onmousedown = start; canvas.onmousemove = move; canvas.onmouseup = end; canvas.onmouseleave = end;
+  canvas.ontouchstart = start; canvas.ontouchmove = move; canvas.ontouchend = end;
+}
+
+/* ===== VISUAL DIFF ===== */
+async function openVisualDiff() {
+  const pdfs = filesFor(TOOLS.diff);
+  if (pdfs.length < 2) { toast('En az 2 PDF gerekli', 'error'); return; }
+  const [f1, f2] = pdfs;
+  $('#diffModal').classList.remove('hidden');
+  const body = $('#diffBody');
+  body.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">Yükleniyor…</div>';
+  const pdf1 = await pdfjsLib.getDocument({ data: f1.bytes.slice() }).promise;
+  const pdf2 = await pdfjsLib.getDocument({ data: f2.bytes.slice() }).promise;
+  const maxPages = Math.max(pdf1.numPages, pdf2.numPages);
+  const hashes1 = [], hashes2 = [];
+  for (let i = 1; i <= maxPages; i++) {
+    try {
+      if (i <= pdf1.numPages) { const p = await pdf1.getPage(i); const { canvas } = await renderPageToCanvas(p, 0.3); hashes1.push(canvas.toDataURL('image/jpeg', 0.5)); }
+      else hashes1.push(null);
+    } catch { hashes1.push(null); }
+    try {
+      if (i <= pdf2.numPages) { const p = await pdf2.getPage(i); const { canvas } = await renderPageToCanvas(p, 0.3); hashes2.push(canvas.toDataURL('image/jpeg', 0.5)); }
+      else hashes2.push(null);
+    } catch { hashes2.push(null); }
+  }
+  const diffs = [];
+  for (let i = 0; i < maxPages; i++) if (hashes1[i] !== hashes2[i]) diffs.push(i+1);
+  let html = `<div style="margin-bottom:12px;font-size:13px">
+    <strong>${f1.name}</strong> vs <strong>${f2.name}</strong><br>
+    <span style="color:var(--muted)">${maxPages} sayfa · ${diffs.length} farklı sayfa</span>
+    ${diffs.length ? '<br><span style="color:var(--warning);font-weight:600">Farklı: ' + diffs.join(', ') + '</span>' : '<br><span style="color:var(--success);font-weight:600">✓ Aynı</span>'}
+  </div>`;
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px">';
+  for (let i = 0; i < maxPages; i++) {
+    const isDiff = hashes1[i] !== hashes2[i];
+    html += `<div style="border:2px solid ${isDiff ? 'var(--warning)' : 'var(--border)'};border-radius:8px;padding:6px;background:var(--bg)">
+      <div style="font-size:11px;font-weight:600;margin-bottom:4px;text-align:center;color:${isDiff?'var(--warning)':'var(--muted)'}">Sayfa ${i+1}${isDiff?' ⚠':' ✓'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+        ${hashes1[i]?`<img src="${hashes1[i]}" style="width:100%;border-radius:4px;border:1px solid var(--border)">`:'<div style="aspect-ratio:1/1.4;background:var(--bg-2);border-radius:4px"></div>'}
+        ${hashes2[i]?`<img src="${hashes2[i]}" style="width:100%;border-radius:4px;border:1px solid var(--border)">`:'<div style="aspect-ratio:1/1.4;background:var(--bg-2);border-radius:4px"></div>'}
+      </div>
+    </div>`;
+  }
+  html += '</div>';
+  body.innerHTML = html;
+}
+
+/* ===== BATCH ===== */
+async function runBatch() {
+  if (state.busy) return;
+  const t = TOOLS[state.tool];
+  if (!t?.run) return;
+  if (!t.batchable) { toast('Bu araç toplu işlemi desteklemiyor', 'error'); return; }
+  const pool = filesFor(t);
+  if (pool.length < 2) { toast('En az 2 dosya gerekli', 'error'); return; }
+  lockUI(true);
+  setStatus('İşleniyor…', 'loading');
+  setProgress(0);
+  const originalFiles = state.files;
+  state.files = pool;
+  const zip = new JSZip();
+  let ok = 0, fail = 0;
+  try {
+    for (let i = 0; i < pool.length; i++) {
+      setProgress(((i) / pool.length) * 100);
+      setStatus(`Dosya ${i+1}/${pool.length}: ${pool[i].name}`, 'loading');
+      await tick();
+      try {
+        const res = await t.run(pool[i]);
+        if (res && res.bytes) { zip.file(res.name, res.bytes); ok++; }
+      } catch (e) { fail++; console.error(`Batch ${i+1}:`, e); }
+    }
+    setProgress(100);
+    if (ok === 0) throw new Error('Hiçbir dosya işlenemedi.');
+    const zipBytes = await zip.generateAsync({ type: 'uint8array' });
+    state.result = { name: `toplu_${state.tool}_${ok}dosya.zip`, bytes: zipBytes, zip: true };
+    renderResult(state.result);
+    addHistory({ tool: state.tool, output: state.result.name });
+    setStatus(`${ok} dosya işlendi${fail ? ' · '+fail+' hata' : ''}`, 'success');
+    toast(`${ok} dosya ZIP'te hazır`, 'success');
+  } catch (e) {
+    setStatus(e.message || String(e), 'error');
+    toast('Hata: ' + (e.message||e), 'error');
+  } finally {
+    state.files = originalFiles;
+    lockUI(false);
+    renderToolPanel();
+    setTimeout(() => setProgress(null), 800);
+  }
+}
+
+/* ===== RUN ===== */
+async function run() {
+  if (state.busy) return;
+  const t = TOOLS[state.tool]; if (!t?.run) return;
+  const pool = filesFor(t);
+  const needCount = t.need === 'multi' ? 2 : t.need === 'one' ? 1 : 0;
+  if (t.need !== 'none' && pool.length < needCount) { toast('Yeterli dosya yok', 'error'); return; }
+  const originalFiles = state.files;
+  if (t.need !== 'none') state.files = pool;
+  lockUI(true);
+  setStatus('İşleniyor…', 'loading');
+  setProgress(0);
+  try {
+    const res = await t.run();
+    setProgress(100);
+    state.result = res; renderResult(res);
+    addHistory({ tool: state.tool, output: res.name, savings: res.originalSize ? Math.round((1 - res.bytes.byteLength / res.originalSize) * 100) : null });
+    setStatus('Tamamlandı', 'success');
+    toast('İşlem tamamlandı', 'success');
+  } catch (e) {
+    console.error(e);
+    setStatus(e.message || String(e), 'error');
+    toast('Hata: ' + (e.message||e), 'error');
+  } finally {
+    state.files = originalFiles;
+    lockUI(false);
+    renderToolPanel();
+    setTimeout(() => setProgress(null), 800);
+  }
+}
+
+function renderResult(res) {
+  const sec = $('#resultSec'); sec.classList.remove('hidden');
+  const mime = res.mime || (res.zip ? 'application/zip' : 'application/pdf');
+  let savingsHTML = '';
+  if (res.originalSize != null && res.bytes) {
+    const pct = Math.round((1 - res.bytes.byteLength / res.originalSize) * 100);
+    if (pct > 0) savingsHTML = `<span class="savings-badge">↓ %${pct} tasarruf</span>`;
+    else if (pct < 0) savingsHTML = `<span class="savings-badge grow">↑ %${-pct} büyüme</span>`;
+  }
+  $('#resultName').textContent = res.name;
+  $('#resultSize').innerHTML = `${fmtSize(res.bytes.byteLength)} · ${res.zip?'ZIP':(mime.split('/')[1]||'').toUpperCase()}${savingsHTML ? ' '+savingsHTML : ''}`;
+  $('#downloadBtn').onclick = () => downloadBlob(res.bytes, res.name, mime);
+  const shareBtn = $('#shareBtn');
+  if (navigator.share && navigator.canShare) {
+    const blob = new Blob([res.bytes], { type: mime });
+    const file = new File([blob], res.name, { type: mime });
+    if (navigator.canShare({ files: [file] })) {
+      shareBtn.classList.remove('hidden');
+      shareBtn.onclick = () => navigator.share({ files: [file], title: res.name }).catch(() => {});
+    } else shareBtn.classList.add('hidden');
+  } else shareBtn.classList.add('hidden');
+  sec.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+/* ===== SAVED FILES ===== */
+async function renderSavedFiles() {
+  const list = await getAllSavedFiles();
+  const el = $('#savedList');
+  if (!list.length) { el.innerHTML = '<div class="history-empty">Henüz dosya yok.</div>'; return; }
+  list.sort((a,b) => b.ts - a.ts);
+  el.innerHTML = list.map(f => {
+    const d = new Date(f.ts).toLocaleDateString('tr-TR', { day:'2-digit', month:'2-digit' });
+    const isPdf = f.type === 'pdf';
+    const dims = isPdf ? (f.encrypted ? '🔐 şifreli' : `${f.pages||'?'} sayfa`) : (f.w && f.h ? `${f.w}×${f.h}` : 'bilinmiyor');
+    return `<li class="saved-item">
+      <div class="si-icon">${isPdf ? FILE_SVG : IMG_SVG}</div>
+      <div class="si-info">
+        <div class="si-name" title="${f.name}">${f.name}</div>
+        <div class="si-meta">${fmtSize(f.size)} · ${dims} · ${d}</div>
+      </div>
+      <div class="si-actions">
+        <button data-act="load" data-id="${f.id}" title="Yükle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </button>
+        <button data-act="del" data-id="${f.id}" title="Sil">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+        </button>
+      </div>
+    </li>`;
+  }).join('');
+  el.querySelectorAll('button[data-act]').forEach(b => {
+    const id = b.dataset.id;
+    if (b.dataset.act === 'del') b.onclick = async () => { await deleteSavedFile(id); renderSavedFiles(); toast('Silindi', 'success'); };
+    if (b.dataset.act === 'load') b.onclick = async () => {
+      const all = await getAllSavedFiles();
+      const f = all.find(x => x.id === id);
+      if (f) {
+        const exists = state.files.some(x => x.name === f.name && x.size === f.size);
+        if (exists) { toast('Zaten listede', 'info'); return; }
+        state.files.push({ name: f.name, size: f.size, bytes: f.bytes, pages: f.pages, type: f.type || 'pdf', mime: f.mime, w: f.w, h: f.h, encrypted: f.encrypted });
+        renderFileList();
+        $('#savedModal').classList.add('hidden');
+        toast(`${f.name} yüklendi`, 'success');
+      }
+    };
+  });
+}
+
+/* ===== INIT ===== */
+function initTheme() {
+  try { const s = localStorage.getItem('pdfstudio-theme'); if (s) document.documentElement.setAttribute('data-theme', s); } catch {}
+  $('#themeBtn').onclick = () => {
+    const cur = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', cur);
+    try { localStorage.setItem('pdfstudio-theme', cur); } catch {}
+  };
+}
+function initSigPersist() {
+  try { const s = localStorage.getItem(SIG_KEY); if (s) state.signaturePng = s; } catch {}
+}
+function initDnD() {
+  const dz = $('#dropzone'), input = $('#fileInput');
+  dz.addEventListener('click', (e) => {
+    if (e.target.closest('#limitToggle') || e.target.closest('.limit-switch') || e.target.closest('.limit-switch-label')) return;
+    input.click();
+  });
+  input.onchange = () => { addFiles(input.files); input.value = ''; };
+  ['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('drag'); }));
+  dz.addEventListener('drop', e => { if (e.dataTransfer?.files) addFiles(e.dataTransfer.files); });
+}
+function initSearch() {
+  $('#toolSearch').oninput = (e) => {
+    state.searchQuery = e.target.value;
+    if (state.files.length) renderToolGrid();
+  };
+}
+function initKeyboard() {
+  document.addEventListener('keydown', (e) => {
+    const ctrl = e.ctrlKey || e.metaKey;
+    if (e.key === 'Escape') {
+      ['reorderModal','historyModal','savedModal','pwModal','signModal','diffModal'].forEach(id => {
+        if (!$('#'+id).classList.contains('hidden')) $('#'+id).classList.add('hidden');
+      });
+      if (state.tool && !state.busy) { state.tool = null; renderToolGrid(); $('#settingsPanel').classList.add('hidden'); $('#settingsPanel').dataset.currentTool = ''; }
+      return;
+    }
+    if (ctrl && e.key === 'o') { e.preventDefault(); if (!state.busy) $('#fileInput').click(); }
+    if (ctrl && e.key === 'k') { e.preventDefault(); $('#toolSearch').focus(); }
+    if (ctrl && e.key === 'Enter') { if (state.tool && !state.busy) { e.preventDefault(); run(); } }
+    if (ctrl && e.key === 's' && state.result?.bytes) {
+      e.preventDefault();
+      const mime = state.result.mime || (state.result.zip ? 'application/zip' : 'application/pdf');
+      downloadBlob(state.result.bytes, state.result.name, mime);
+      toast('İndirildi', 'success');
+    }
+    if (ctrl && e.key === 'h') { e.preventDefault(); renderHistory(); $('#historyModal').classList.remove('hidden'); }
+  });
+}
+function initModals() {
+  $('#historyBtn').onclick = () => { renderHistory(); $('#historyModal').classList.remove('hidden'); };
+  $('#historyClose').onclick = () => $('#historyModal').classList.add('hidden');
+  $('#historyClear').onclick = () => { try { localStorage.removeItem(HISTORY_KEY); } catch {} updateHistoryBadge(); renderHistory(); toast('Temizlendi', 'success'); };
+  $('#historyModal').onclick = e => { if (e.target.id === 'historyModal') $('#historyModal').classList.add('hidden'); };
+
+  $('#savedBtn').onclick = () => { renderSavedFiles(); $('#savedModal').classList.remove('hidden'); };
+  $('#savedClose').onclick = () => $('#savedModal').classList.add('hidden');
+  $('#savedClear').onclick = async () => { await clearSavedFiles(); renderSavedFiles(); toast('Silindi', 'success'); };
+  $('#savedModal').onclick = e => { if (e.target.id === 'savedModal') $('#savedModal').classList.add('hidden'); };
+
+  $('#pwBtn').onclick = () => { renderPasswords(); $('#pwModal').classList.remove('hidden'); };
+  $('#pwClose').onclick = () => $('#pwModal').classList.add('hidden');
+  $('#pwAdd').onclick = () => {
+    const name = $('#pwName').value.trim();
+    const pw = $('#pwVal').value;
+    if (!pw) { toast('Şifre boş olamaz', 'error'); return; }
+    addPassword(name || '(isimsiz)', pw);
+    $('#pwName').value = ''; $('#pwVal').value = '';
+    renderPasswords();
+    toast('Eklendi', 'success');
+  };
+  $('#pwModal').onclick = e => { if (e.target.id === 'pwModal') $('#pwModal').classList.add('hidden'); };
+
+  $('#signClose').onclick = () => $('#signModal').classList.add('hidden');
+  /* PATCH 7: sigClear gerçekten siler */
+  $('#sigClear').onclick = () => {
+    if (sigCtx) { sigCtx.fillStyle = '#fff'; sigCtx.fillRect(0,0,600,240); sigCtx.strokeStyle = '#000'; }
+    state.signaturePng = null;
+    try { localStorage.removeItem(SIG_KEY); } catch {}
+    $('#settingsPanel').dataset.currentTool = '';
+    renderToolPanel();
+    toast('İmza silindi', 'info');
+  };
+  $('#sigSave').onclick = () => {
+    const canvas = $('#sigCanvas');
+    state.signaturePng = canvas.toDataURL('image/png');
+    try { localStorage.setItem(SIG_KEY, state.signaturePng); } catch {}
+    $('#signModal').classList.add('hidden');
+    $('#settingsPanel').dataset.currentTool = '';
+    renderToolPanel();
+    toast('İmza kaydedildi', 'success');
+  };
+  $('#signModal').onclick = e => { if (e.target.id === 'signModal') $('#signModal').classList.add('hidden'); };
+
+  $('#diffClose').onclick = () => $('#diffModal').classList.add('hidden');
+  $('#diffModal').onclick = e => { if (e.target.id === 'diffModal') $('#diffModal').classList.add('hidden'); };
+
+  $('#reorderClose').onclick = () => $('#reorderModal').classList.add('hidden');
+  $('#reorderApply').onclick = applyReorder;
+  $('#reorderModal').onclick = e => { if (e.target.id === 'reorderModal') $('#reorderModal').classList.add('hidden'); };
+}
+function initLimitToggle() {
+  const btn = $('#limitToggle'), label = $('#limitLabel');
+  if (!btn || !label) return;
+  const apply = (unlimited) => {
+    btn.classList.toggle('on', unlimited);
+    btn.setAttribute('aria-checked', unlimited ? 'true' : 'false');
+    label.classList.toggle('on', unlimited);
+    label.textContent = unlimited ? 'Sayfa limiti yok' : `Maks ${DEFAULT_MAX_PAGES} sayfa`;
+  };
+  let initial = false;
+  try { initial = localStorage.getItem(LIMIT_KEY) === '1'; } catch {}
+  apply(initial);
+  const toggle = (e) => {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    if (state.busy) { toast('İşlem sürüyor, bekleyin', 'info'); return; }
+    let cur = false;
+    try { cur = localStorage.getItem(LIMIT_KEY) === '1'; } catch {}
+    const next = !cur;
+    try { localStorage.setItem(LIMIT_KEY, next ? '1' : '0'); }
+    catch { toast('Tarayıcı localStorage yazamıyor', 'error'); return; }
+    apply(next);
+    toast(next ? '♾️ Sayfa limiti kaldırıldı' : `Sayfa limiti: ${DEFAULT_MAX_PAGES}`, next ? 'success' : 'info');
+  };
+  btn.addEventListener('click', toggle);
+  label.addEventListener('click', toggle);
+}
+
+$('#clearBtn').onclick = () => {
+  if (state.busy) return;
+  state.files = []; state.tool = null; state.result = null;
+  $('#settingsPanel').dataset.currentTool = '';
+  renderFileList();
+  setStatus('');
+};
+$('#runBtn').onclick = run;
+$('#batchBtn').onclick = runBatch;
+$('#spClose').onclick = () => {
+  if (state.busy) return;
+  state.tool = null; renderToolGrid(); $('#settingsPanel').classList.add('hidden'); $('#settingsPanel').dataset.currentTool = '';
+};
+
+initTheme();
+initSigPersist();
+initDnD();
+initSearch();
+initKeyboard();
+initModals();
+initLimitToggle();
+updateHistoryBadge();
+</script>
+</body>
+</html>
